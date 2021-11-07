@@ -1,0 +1,86 @@
+---
+title: "P8105: Homework 4"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+# Resume
+
+
+
+
+
+## Education
+
+
+### Columbia University Mailman School of Public Health
+
+Master of Public Health, Epidemiology, Certificate in Applied Biostatistics
+  2020 – exp. May 2022 
+  
+  Current GPA: 3.9
+  
+### University of Michigan 								
+Bachelor of Science - Major in Biology, Health, and Society, Major in Spanish			   
+  2016 – 2020
+
+
+
+
+## Experience
+
+
+### Columbia University, Department of Epidemiology				   
+
+Data Analyst 						               			    
+  May 2021 – Present
+  
+  Collaborated to form hypotheses about motor vehicle ticketing patterns during the        COVID-19 pandemic. Sourced and complied data to expand upon existing datasets. Wrote     SAS code and conducted statistical analyses to determine associations in the data.       Visualized data through tables and figures.
+  
+### Columbia University, Department of Epidemiology	
+
+Principal Data Analyst						                                           
+  May 2021 – Present
+  
+  Cleaned National Health and Nutrition Examination Survey data. Wrote SAS code and        conducted multilevel linear and logistic regression to assess for associations between   sleep health and cardiometabolic health.
+  
+### Columbia University Mailman School of Public Health		
+
+Research Methods and Applications Quantitative Teaching Assistant		      
+  September 2021 – Present
+  
+  Independently instructed a classroom of 20 students. Created lesson plans to facilitate   student understanding of content. Evaluated students’ performance and provided feedback   to improve learning.
+
+
+
+
+## Certifications and Skills 
+
+
+### Computer Skills 				  
+
+Microsoft Word, Excel, and PowerPoint
+
+SAS (proficient)
+
+R (beginner)
+
+### Language Skills 
+
+English (native)
+
+Spanish (proficient)
+
+### Certifications 	
+
+HIPAA 
+
+CITI (human subjects research)
+
+Basic Life Support			  
+
+Certified Nursing Assistant (2018) 
+
+
