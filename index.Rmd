@@ -1,5 +1,5 @@
 ---
-title: "P8105: Homework 4"
+title: "Welcome!"
 output: 
   html_document:
     toc: true
@@ -7,7 +7,8 @@ output:
     theme: spacelab
 ---
 
-# Welcome! 
+## P8105 HW4
+
 ### This is Sydney Musick's website for Data Science I: Homework 4
 
 Thank you the TA(s) for grading this and for your hard work this semester!
@@ -15,11 +16,11 @@ Thank you the TA(s) for grading this and for your hard work this semester!
 
 Here are some helpful links regarding the Columbia graduate student worker strikes:
 
-[Important docs from the organizers](https://docs.google.com/document/d/14O5UUuwV-u5zDn477KjihOdn7vAGc1TdiwP6L982L4o/edit)
+* [Important docs from the organizers](https://docs.google.com/document/d/14O5UUuwV-u5zDn477KjihOdn7vAGc1TdiwP6L982L4o/edit)
 
-[Bargaining framework](https://www.studentworkersofcolumbia.com/bargaining-framework)
+* [Bargaining framework](https://www.studentworkersofcolumbia.com/bargaining-framework)
 
-[Recent provost update](https://provost.columbia.edu/news/update-student-workers-columbia-uaw-negotiations)
+* [Recent provost update](https://provost.columbia.edu/news/update-student-workers-columbia-uaw-negotiations)
 
 ![](qtsDvRws_400x400.jpeg)
 

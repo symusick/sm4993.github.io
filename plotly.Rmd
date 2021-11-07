@@ -1,0 +1,58 @@
+---
+title: "Plotly"
+output: 
+  html_document:
+    toc: true
+    toc_float: true
+---
+
+### Loading packages
+```{r librarys}
+library(tidyverse)
+library(plotly)
+library(p8105.datasets)
+```
+
+### Loading and filtering data
+```{r data}
+data("ny_noaa")
+ny_noaa = ny_noaa %>%
+  drop_na() %>%
+  separate(date, into = c("year", "month", "day")) %>%
+  filter(!(prcp == 0)) %>%
+  filter(!(snow == 0)) %>%
+  filter(!(snwd == 0)) %>%
+  filter(year == 2010)
+
+```
+
+### Creating bar chart
+```{r}
+plot_ly(ny_noaa, x = ~month, y = ~snow, type = "bar") 
+```
+
+### Creating scatter plot
+```{r}
+noaa_month = ny_noaa %>%
+  mutate(month = replace(month, month == "01", "January")) %>%
+  mutate(month = replace(month, month == "02", "February")) %>%
+  mutate(month = replace(month, month == "03", "March")) %>%
+  mutate(month = replace(month, month == "04", "April")) %>%
+  mutate(month = replace(month, month == "05", "May")) %>%
+  mutate(month = replace(month, month == "06", "June")) %>%
+  mutate(month = replace(month, month == "07", "July")) %>%
+  mutate(month = replace(month, month == "08", "August")) %>%
+  mutate(month = replace(month, month == "09", "September")) %>%
+  mutate(month = replace(month, month == "10", "October")) %>%
+  mutate(month = replace(month, month == "11", "November")) %>%
+  mutate(month = replace(month, month == "12", "December"))
+
+plot_ly(noaa_month, x = ~snow, y = ~prcp, color = ~month, type = "scatter", mode = "markers") 
+```
+
+### Creating boxplot
+```{r}
+plot_ly(ny_noaa, x = ~month, y = ~snow, type = "box") 
+```
+
+
