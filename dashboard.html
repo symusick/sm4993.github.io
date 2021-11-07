@@ -1,0 +1,2783 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+<title>Dashboard</title>
+
+<meta property="og:title" content="Dashboard" />
+
+<meta name='viewport' content='width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no' />
+
+<link rel="icon" href="data:image/x-icon;" type="image/x-icon">
+
+
+<script type="text/javascript">
+window.FlexDashboardComponents = [];
+</script>
+
+<script id="flexdashboard-navbar" type="application/json">
+[{"title":"Source Code","icon":"fa-code","href":"source_embed","align":"right"}]
+</script>
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-3.5.1/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/stickytableheaders-0.1.19/jquery.stickytableheaders.min.js"></script>
+<link href="site_libs/font-awesome-5.1.0/css/all.css" rel="stylesheet" />
+<link href="site_libs/font-awesome-5.1.0/css/v4-shims.css" rel="stylesheet" />
+<link href="site_libs/featherlight-1.3.5/featherlight.min.css" rel="stylesheet" />
+<script src="site_libs/featherlight-1.3.5/featherlight.min.js"></script>
+<link href="site_libs/prism-1.4.1/prism.css" rel="stylesheet" />
+<script src="site_libs/prism-1.4.1/prism.js"></script>
+<script src="site_libs/htmlwidgets-1.5.4/htmlwidgets.js"></script>
+<script src="site_libs/plotly-binding-4.10.0/plotly.js"></script>
+<script src="site_libs/typedarray-0.1/typedarray.min.js"></script>
+<link href="site_libs/crosstalk-1.1.1/css/crosstalk.css" rel="stylesheet" />
+<script src="site_libs/crosstalk-1.1.1/js/crosstalk.min.js"></script>
+<link href="site_libs/plotly-htmlwidgets-css-2.5.1/plotly-htmlwidgets.css" rel="stylesheet" />
+<script src="site_libs/plotly-main-2.5.1/plotly-latest.min.js"></script>
+<style type="text/css">
+
+/*
+ Dashboard CSS from Keen IO Dashboards
+ (https://github.com/keen/dashboards)
+*/
+
+body {
+  background: #f2f2f2;
+  padding: 60px 0 0 8px; /* padding-top overridden by theme */
+}
+
+body hr {
+  border-color: #d7d7d7;
+  margin: 10px 0;
+}
+
+.navbar-inverse .navbar-nav > li > a,
+.navbar .navbar-brand {
+  text-decoration: none;
+}
+
+.navbar-logo {
+  margin-top: 1px;
+}
+
+.navbar-logo img {
+  margin-right: 12px;
+}
+
+.navbar-author {
+  margin-left: 10px;
+  font-size: 15px;
+}
+
+.navbar .dropdown-menu .fa {
+  min-width: 20px;
+}
+
+.navbar .dropdown-menu {
+  min-width: 150px;
+  max-height: 500px;
+  overflow: auto;
+}
+
+.chart-wrapper,
+.nav-tabs-custom,
+.sbframe-commentary
+{
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+  margin-bottom: 8px;
+  margin-right: 8px;
+}
+
+.chart-title {
+  border-bottom: 1px solid #d7d7d7;
+  color: #666;
+  font-size: 14px;
+  font-weight: 300;
+  padding: 7px 10px 4px;
+}
+
+.chart-wrapper .chart-title:empty {
+  display: none;
+}
+
+.chart-wrapper .chart-stage {
+  overflow: hidden;
+  padding: 5px 10px;
+  position: relative;
+}
+
+.chart-wrapper .chart-notes {
+  background: #fbfbfb;
+  border-top: 1px solid #e2e2e2;
+  color: #808080;
+  font-size: 12px;
+  padding: 8px 10px 5px;
+}
+
+/*
+ CSS for handling flexbox layout
+*/
+
+#dashboard-container {
+  visibility: hidden;
+}
+
+.tab-content>.dashboard-page-wrapper.active {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.dashboard-page-wrapper {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.dashboard-row-orientation {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.dashboard-row {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.dashboard-row-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+}
+
+.dashboard-column-orientation {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: horizontal;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: row;
+      -ms-flex-direction: row;
+          flex-direction: row;
+}
+
+.dashboard-column {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.chart-wrapper-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-orient: vertical;
+  -webkit-box-direction: normal;
+  -webkit-flex-direction: column;
+      -ms-flex-direction: column;
+          flex-direction: column;
+}
+
+.chart-stage-flex {
+  -webkit-box-flex: 1;
+  -webkit-flex: 1;
+      -ms-flex: 1;
+          flex: 1;
+  position: relative;
+}
+
+.chart-shim {
+  position: absolute;
+  left: 8px; top: 8px; right: 8px; bottom: 8px;
+}
+
+.no-padding .chart-shim {
+  left: 0; top: 0; right: 0; bottom: 0;
+}
+
+.flowing-content-shim {
+  overflow: auto;
+  left: 0; top: 0; right: 0; bottom: 0;
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.flowing-content-container {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.chart-stage .table-bordered {
+  border: none;
+}
+
+.chart-stage .table-bordered > tbody > tr > th,
+.chart-stage .table-bordered > tfoot > tr > th,
+.chart-stage .table-bordered > tbody > tr > td,
+.chart-stage .table-bordered > tfoot > tr > td {
+  border: none;
+}
+
+.chart-stage .table-bordered > tbody > tr > td {
+  border-top: 1px solid #dddddd;
+}
+
+.chart-stage .table-bordered > thead > tr > th {
+  border: none;
+  border-bottom: 2px solid #dddddd;
+}
+
+.bootstrap-table table>thead {
+  background-color: #fff;
+}
+
+.bootstrap-table table.data,
+.bootstrap-table table.shiny-table {
+  width: inherit !important;
+}
+
+.bootstrap-table table.data>tbody>tr>th,
+.bootstrap-table table.shiny-table>tbody>tr>th {
+  border-top: none;
+  border-bottom: 2px solid #dddddd;
+  padding: 5px;
+}
+
+.bootstrap-table .data td[align=right] {
+  font-family: inherit;
+}
+
+.chart-wrapper form {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+
+.shiny-input-container label {
+  font-weight: normal;
+}
+
+.chart-stage .html-widget {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-stage .html-widget-static-bound {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+.chart-stage .shiny-bound-output {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Omit display of empty paragraphs */
+
+.chart-shim>p:empty {
+  display: none;
+}
+
+.chart-stage>p:empty {
+  display: none;
+}
+
+/* Omit display of special knitr options div*/
+
+.chart-stage .knitr-options {
+  display: none;
+}
+
+/* Automatically resizing images */
+
+.image-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 0;
+}
+
+.image-container img {
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* Value box */
+
+.value-box {
+  border-radius: 2px;
+  position: relative;
+  display: block;
+  margin-right: 8px;
+  margin-bottom: 8px;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+
+.value-box > .inner {
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.value-box .value {
+  font-size: 38px;
+  font-weight: bold;
+  margin: 0 0 3px 0;
+  white-space: nowrap;
+  padding: 0;
+}
+
+.value-box .caption {
+  font-size: 15px;
+}
+.value-box .caption > small {
+  display: block;
+  font-size: 13px;
+  margin-top: 5px;
+}
+
+.value-box .icon i {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 80px;
+  color: rgba(0, 0, 0, 0.15);
+}
+
+.linked-value:hover {
+  cursor: pointer;
+}
+
+.value-box.linked-value:hover {
+  box-shadow: 0 2px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* STORYBOARD */
+
+.storyboard-nav button {
+  background: transparent;
+  border: 0;
+  opacity: .3;
+  outline: none;
+  padding: 0;
+}
+
+.storyboard-nav button:hover,
+.storyboard-nav button:hover {
+  opacity: .5;
+}
+
+.storyboard-nav button:disabled,
+.storyboard-nav button:disabled {
+  opacity: .1;
+}
+
+.storyboard-nav .sbnext,
+.storyboard-nav .sbprev {
+  float: left;
+  width: 2%;
+  height: 120px;
+  font-size: 50px;
+}
+
+.storyboard-nav .sbprev {
+  text-align: left;
+  width: 2%;
+}
+
+.storyboard-nav .sbnext {
+  float: right;
+  text-align: right;
+  margin-right: 8px;
+}
+
+.storyboard-nav .sbframelist {
+  margin: 0 auto;
+  width: 94%;
+  height: 120px;
+  overflow: hidden;
+  text-shadow: none;
+  margin-bottom: 8px;
+}
+
+.storyboard-nav .sbframelist ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+.storyboard-nav .sbframelist ul li {
+  float: left;
+  width: 270px;
+  height: 100%;
+  padding: 10px 10px 10px 10px;
+  margin-right: 8px;
+  background: #fff;
+  border: 1px solid #e2e2e2;
+  border-radius: 3px;
+  color: #3a3c47;
+  text-align: left;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+.storyboard-nav .sbframelist ul li:last-child {
+  margin-right: 0px;
+}
+
+.storyboard-nav .sbframelist ul li.active {
+  color: #fff;
+  background: #B8B8B8;
+}
+
+.sbframe-commentary {
+  width: 300px;
+  background: #fbfbfb;
+  font-size: 14px;
+}
+
+.sbframe-commentary ul {
+  padding-left: 22px;
+}
+
+.sbframe.active {
+  display: flex;
+}
+
+.sbframe:not(.active) {
+  display: none;
+}
+
+/* NAV TABS */
+
+.nav-tabs-custom > .nav-tabs {
+  margin: 0;
+  border-bottom: 1px solid #d7d7d7;
+  color: #666;
+  font-size: 14px;
+  font-weight: 300;
+  border-top-right-radius: 3px;
+  border-top-left-radius: 3px;
+}
+.nav-tabs-custom > .nav-tabs > li {
+  border-top: 3px solid transparent;
+  margin-bottom: -1px;
+  margin-right: 5px;
+}
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs-custom > .nav-tabs > li > a:active {
+  color: #666;
+  font-weight: 300;
+  font-size: 14px;
+  border-radius: 0;
+  padding: 3px 10px 5px;
+  text-transform: none;
+}
+
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a {
+  border-bottom-color: transparent;
+}
+
+.nav-tabs-custom > .nav-tabs > li > a.text-muted {
+  color: #999;
+}
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs-custom > .nav-tabs > li > a:hover {
+  background: transparent;
+  margin: 0;
+}
+.nav-tabs-custom > .nav-tabs > li > a:hover {
+  color: #999;
+}
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:hover,
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:focus,
+.nav-tabs-custom > .nav-tabs > li:not(.active) > a:active {
+  border-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs > li.active {
+  border-top-color: #3c8dbc;
+}
+.nav-tabs-custom > .nav-tabs > li.active > a,
+.nav-tabs-custom > .nav-tabs > li.active:hover > a {
+  background-color: #fff;
+  color: #666;
+}
+.nav-tabs-custom > .nav-tabs > li.active > a {
+  border-top-color: transparent;
+  border-left-color: #d7d7d7;
+  border-right-color: #d7d7d7;
+}
+.nav-tabs-custom > .nav-tabs > li:first-of-type {
+  margin-left: 0;
+}
+.nav-tabs-custom > .nav-tabs > li:first-of-type.active > a {
+  border-left-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs.pull-right {
+  float: none !important;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li {
+  float: right;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type {
+  margin-right: 0;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type > a {
+  border-left-width: 1px;
+}
+.nav-tabs-custom > .nav-tabs.pull-right > li:first-of-type.active > a {
+  border-left-color: #d7d7d7;
+  border-right-color: transparent;
+}
+.nav-tabs-custom > .nav-tabs > li.header {
+  line-height: 35px;
+  padding: 0 10px;
+  font-size: 20px;
+  color: #666;
+}
+.nav-tabs-custom > .nav-tabs > li.header > .fa,
+.nav-tabs-custom > .nav-tabs > li.header > .glyphicon,
+.nav-tabs-custom > .nav-tabs > li.header > .ion {
+  margin-right: 5px;
+}
+.nav-tabs-custom > .tab-content {
+  background: #fff;
+  padding: 0;
+  border-bottom-right-radius: 3px;
+  border-bottom-left-radius: 3px;
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.nav-tabs-custom > .tab-content > .chart-wrapper {
+  background: #fff;
+  border: none;
+  margin: 0;
+}
+
+
+.nav-tabs-custom > .tab-content > .active {
+  display: -webkit-box;
+  display: -webkit-flex;
+  display: -ms-flexbox;
+  display: flex;
+}
+
+.nav-tabs-custom .dropdown.open > a:active,
+.nav-tabs-custom .dropdown.open > a:focus {
+  background: transparent;
+  color: #999;
+}
+
+
+@media (max-width: 767px) {
+  .value-box {
+    text-align: center;
+    margin-right: 8px;
+  }
+  .value-box .icon {
+    display: none;
+  }
+}
+
+/* Fixed position sidebar */
+
+.section.sidebar {
+  position: fixed;
+  top: 51px; /* overridden by theme */
+  left: 0;
+  bottom: 0;
+  border-right: 1px solid #e2e2e2;
+  background-color: white; /* overridden by theme */
+  padding-left: 10px;
+  padding-right: 10px;
+  visibility: hidden;
+  overflow: auto;
+}
+
+.section.sidebar form p:first-child {
+  margin-top: 10px;
+}
+
+/* Embedded source code */
+
+#flexdashboard-source-code {
+  display: none;
+}
+
+.featherlight-content #flexdashboard-source-code {
+  display: inline-block;
+}
+
+.featherlight-content {
+  width: 80%;
+  max-width: 800px;
+  padding: 0 !important;
+  border-bottom: none !important;
+}
+
+.featherlight:last-of-type {
+  background: rgba(0, 0, 0, 0.7);
+}
+
+.featherlight-inner {
+  width: 100%;
+}
+
+.featherlight-content pre {
+  margin: 0;
+  border: 0;
+  background: #fff;
+  font-size: 12px;
+}
+
+.unselectable {
+  -ms-user-select: none;
+  -webkit-user-select: none;
+  -khtml-user-select: none;
+  -moz-user-select: -moz-none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+#flexdashboard-source-code code {
+  -ms-user-select: text;
+  -webkit-user-select: text;
+  -khtml-user-select: text;
+  -moz-user-select: text;
+  -o-user-select: text;
+  user-select: text;
+}
+
+/* DataTables Tweaks */
+
+.dataTables_filter input[type="search"] {
+  -webkit-appearance: searchfield;
+  outline: none;
+}
+
+.dataTables_wrapper.no-footer
+.dataTables_info {
+  padding-top: 0;
+}
+
+
+table.dataTable thead th {
+  border-bottom: 1px solid #d7d7d7;
+}
+
+.dataTables_wrapper.no-footer .dataTables_scrollBody {
+  border-bottom: 1px solid #d7d7d7;
+}
+
+/* Mobile phone only CSS */
+
+.desktop-layout div.section.mobile {
+  display: none;
+}
+
+.mobile-layout div.section.no-mobile {
+  display: none;
+}
+
+.mobile-figure {
+  display: none;
+}
+
+
+
+body {
+  padding-top: 60px;
+}
+
+.section.sidebar {
+  top: 51px;
+  background-color: rgba(39, 128, 227, 0.1);
+}
+
+.value-box {
+  color: #f9f9f9;
+}
+
+.bg-primary {
+  background-color: rgba(39, 128, 227, 0.7);
+}
+
+.storyboard-nav .sbframelist ul li.active {
+  background-color: rgba(39, 128, 227, 0.7);
+}
+
+.nav-tabs-custom > .nav-tabs > li.active {
+  border-top-color: rgba(39, 128, 227, 0.7);
+}
+
+.bg-info {
+  background-color: rgba(153, 84, 187, 0.7);
+}
+
+.bg-warning {
+  background-color: rgba(255, 117, 24, 0.7);
+}
+
+.bg-danger {
+  background-color: rgba(255, 0, 57, 0.7);
+}
+
+.bg-success {
+  background-color: rgba(63, 182, 24, 0.7);
+}
+
+.chart-title {
+  font-weight: 500;
+}
+
+.nav-tabs-custom > .nav-tabs > li > a,
+.nav-tabs-custom > .nav-tabs > li > a:active {
+  font-weight: 500;
+}
+
+@media only screen and (min-width: 768px) {
+html, body {
+  height: 100%;
+}
+
+#dashboard-container {
+  height: 100%;
+}
+}
+</style>
+
+
+
+</head>
+
+<body>
+
+<div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+<div class="container-fluid">
+<div class="navbar-header">
+
+<button id="navbar-button" type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+<span class="icon-bar"></span>
+</button>
+
+<span class="navbar-logo pull-left">
+  
+</span>
+<span class="navbar-brand">
+  Dashboard
+  <span class="navbar-author">
+        </span>
+</span>
+
+</div>
+<div id="navbar" class="navbar-collapse collapse">
+<ul class="nav navbar-nav navbar-left">
+</ul>
+<ul class="nav navbar-nav navbar-right">
+</ul>
+</div><!--/.nav-collapse-->
+</div><!--/.container-->
+</div><!--/.navbar-->
+
+<script type="text/javascript">
+
+
+var FlexDashboard = (function () {
+
+  // initialize options
+  var _options = {};
+
+  var FlexDashboard = function() {
+
+    // default options
+    _options = $.extend(_options, {
+      theme: "cosmo",
+      fillPage: false,
+      orientation: 'columns',
+      storyboard: false,
+      defaultFigWidth: 576,
+      defaultFigHeight: 461,
+      defaultFigWidthMobile: 360,
+      defaultFigHeightMobile: 461,
+      isMobile: false,
+      isPortrait: false,
+      resize_reload: true
+    });
+  };
+
+  function init(options) {
+
+    // extend default options
+    $.extend(true, _options, options);
+
+    // add ids to sections that don't have them (pandoc won't assign ids
+    // to e.g. sections with titles consisting of only chinese characters)
+    var nextId = 1;
+    $('.level1:not([id]),.level2:not([id]),.level3:not([id])').each(function() {
+      $(this).attr('id', 'dashboard-' + nextId++);
+    });
+
+    // find navbar items
+    var navbarItems = $('#flexdashboard-navbar');
+    if (navbarItems.length)
+      navbarItems = JSON.parse(navbarItems.html());
+    addNavbarItems(navbarItems);
+
+    // find the main dashboard container
+    var dashboardContainer = $('#dashboard-container');
+
+    // resolve mobile classes
+    resolveMobileClasses(dashboardContainer);
+
+    // one time global initialization for components
+    componentsInit(dashboardContainer);
+
+    // look for a global sidebar
+    var globalSidebar = dashboardContainer.find(".section.level1.sidebar");
+    if (globalSidebar.length > 0) {
+
+      // global layout for fullscreen displays
+      if (!isMobilePhone()) {
+
+         // hoist it up to the top level
+         globalSidebar.insertBefore(dashboardContainer);
+
+         // lay it out (set width/positions)
+         layoutSidebar(globalSidebar, dashboardContainer);
+
+      // tuck sidebar into first page for mobile phones
+      } else {
+
+        // convert it into a level3 section
+        globalSidebar.removeClass('sidebar');
+        globalSidebar.removeClass('level1');
+        globalSidebar.addClass('level3');
+        var h1 = globalSidebar.children('h1');
+        var h3 = $('<h3></h3>');
+        h3.append(h1.contents());
+        h3.insertBefore(h1);
+        h1.detach();
+
+        // move it into the first page
+        var page = dashboardContainer.find('.section.level1').first();
+        if (page.length > 0)
+          page.prepend(globalSidebar);
+      }
+    }
+
+    // look for pages to layout
+    var pages = $('div.section.level1');
+    if (pages.length > 0) {
+
+        // find the navbar and collapse on clicked
+        var navbar = $('#navbar');
+        navbar.on("click", "a[data-toggle!=dropdown]", null, function () {
+           navbar.collapse('hide');
+        });
+
+        // envelop the dashboard container in a tab content div
+        dashboardContainer.wrapInner('<div class="tab-content"></div>');
+
+        pages.each(function(index) {
+
+          // lay it out
+          layoutDashboardPage($(this));
+
+          // add it to the navbar
+          addToNavbar($(this), index === 0);
+
+        });
+
+    } else {
+
+      // remove the navbar and navbar button if we don't
+      // have any navbuttons
+      if (navbarItems.length === 0) {
+        $('#navbar').remove();
+        $('#navbar-button').remove();
+      }
+
+      // add the storyboard class if requested
+      if (_options.storyboard)
+        dashboardContainer.addClass('storyboard');
+
+      // layout the entire page
+      layoutDashboardPage(dashboardContainer);
+    }
+
+    // if we are in shiny we need to trigger a window resize event to
+    // force correct layout of shiny-bound-output elements
+    if (isShinyDoc())
+      $(window).trigger('resize');
+
+    // make main components visible
+    $('.section.sidebar').css('visibility', 'visible');
+    dashboardContainer.css('visibility', 'visible');
+
+    // handle location hash
+    handleLocationHash();
+
+    // intialize prism highlighting
+    initPrismHighlighting();
+
+    // record mobile and orientation state then register a handler
+    // to refresh if resize_reload is set to true and it changes
+    _options.isMobile = isMobilePhone();
+    _options.isPortrait = isPortrait();
+    if (_options.resize_reload) {
+      $(window).on('resize', function() {
+        if (_options.isMobile !== isMobilePhone() ||
+            _options.isPortrait !== isPortrait()) {
+          window.location.reload();
+        }
+      });
+    } else {
+      // if in desktop mode and resizing to mobile, make sure the heights are 100%
+      // This enforces what `fillpage.css` does for "wider" pages.
+      // Since we are not reloading once the page becomes small, we need to force the height to 100%
+      // This is a new situation introduced when `_options.resize_reload` is `false`
+      if (! _options.isMobile) {
+        // only add if `fillpage.css` was added in the first place
+        if (_options.fillPage) {
+          // fillpage.css
+          $("html,body,#dashboard").css("height", "100%");
+        }
+      }
+    }
+    // trigger layoutcomplete event
+    dashboardContainer.trigger('flexdashboard:layoutcomplete');
+  }
+
+  function resolveMobileClasses(dashboardContainer) {
+     // add top level layout class
+    dashboardContainer.addClass(isMobilePhone() ? 'mobile-layout' :
+                                                  'desktop-layout');
+
+    // look for .mobile sections and add .no-mobile to their peers
+    var mobileSections = $('.section.mobile');
+    mobileSections.each(function() {
+       var id = $(this).attr('id');
+       var nomobileId = id.replace(/-\d+$/, '');
+       $('#' + nomobileId).addClass('no-mobile');
+    });
+  }
+
+  function addNavbarItems(navbarItems) {
+
+    var navbarLeft = $('ul.navbar-left');
+    var navbarRight = $('ul.navbar-right');
+
+    for (var i = 0; i<navbarItems.length; i++) {
+
+      // get the item
+      var item = navbarItems[i];
+
+      // determine the container
+      var container = null;
+      if (item.align === "left")
+        container = navbarLeft;
+      else
+        container = navbarRight;
+
+      // navbar menu if we have multiple items
+      if (item.items) {
+        var menu = navbarMenu(null, item.icon, item.title, container);
+        for (var j = 0; j<item.items.length; j++) {
+          var subItem = item.items[j];
+          var li = $('<li></li>');
+          li.append(navbarLink(subItem.icon, subItem.title, subItem.href, subItem.target));
+          menu.append(li);
+        }
+      } else {
+        var li = $('<li></li>');
+        li.append(navbarLink(item.icon, item.title, item.href, item.target));
+        container.append(li);
+      }
+    }
+  }
+
+  // create or get a reference to an existing dropdown menu
+  function navbarMenu(id, icon, title, container) {
+    var existingMenu = [];
+    if (id)
+      existingMenu = container.children('#' + id);
+    if (existingMenu.length > 0) {
+      return existingMenu.children('ul');
+    } else {
+      var li = $('<li></li>');
+      if (id)
+        li.attr('id', id);
+      li.addClass('dropdown');
+      // auto add "Share" title on mobile if necessary
+      if (!title && icon && (icon === "fa-share-alt") && isMobilePhone())
+        title = "Share";
+      if (title) {
+        title = title + ' <span class="caret"></span>';
+      }
+      var a = navbarLink(icon, title, "#");
+      a.addClass('dropdown-toggle');
+      a.attr('data-toggle', 'dropdown');
+      a.attr('role', 'button');
+      a.attr('aria-expanded', 'false');
+      li.append(a);
+      var ul = $('<ul class="dropdown-menu"></ul>');
+      ul.attr('role', 'menu');
+      li.append(ul);
+      container.append(li);
+      return ul;
+    }
+  }
+
+  function addToNavbar(page, active) {
+
+    // capture the id and data-icon attribute (if any)
+    var id = page.attr('id');
+    var icon = page.attr('data-icon');
+    var navmenu = page.attr('data-navmenu');
+
+    // get hidden state (transfer this to navbar)
+    var hidden = page.hasClass('hidden');
+    page.removeClass('hidden');
+
+    // sanitize the id for use with bootstrap tabs
+    id = id.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_');
+    page.attr('id', id);
+
+    // get the wrapper
+    var wrapper = page.closest('.dashboard-page-wrapper');
+
+    // move the id to the wrapper
+    page.removeAttr('id');
+    wrapper.attr('id', id);
+
+    // add the tab-pane class to the wrapper
+    wrapper.addClass('tab-pane');
+    if (active)
+      wrapper.addClass('active');
+
+    // get a reference to the h1, discover its inner contens, then detach it
+    var h1 = wrapper.find('h1').first();
+    var title = h1.contents();
+    h1.detach();
+
+    // create a navbar item
+    var li = $('<li></li>');
+    var a = navbarLink(icon, title, '#' + id);
+    a.attr('data-toggle', 'tab');
+    li.append(a);
+
+    // add it to the navbar (or navbar menu if specified)
+    var container = $('ul.navbar-left');
+    if (navmenu) {
+      var menuId = navmenu.replace(/\s+/g, '');
+      var menu = navbarMenu(menuId, null, navmenu, container);
+      menu.append(li);
+    } else {
+      container.append(li);
+    }
+
+    // hide it if requested
+    if (hidden)
+      li.addClass('hidden');
+  }
+
+  function navbarLink(icon, title, href, target) {
+
+    var a = $('<a></a>');
+    if (icon) {
+
+      // get the name of the icon set and icon
+      var dashPos = icon.indexOf("-");
+      var iconSet = null;
+      var iconSplit = icon.split(" ");
+      if (iconSplit.length > 1) {
+        iconSet = iconSplit[0];
+        icon = iconSplit.slice(1).join(" ");
+      } else {
+        iconSet = icon.substring(0, dashPos);
+      }
+      var iconName = icon.substring(dashPos + 1);
+
+      // create the icon
+      var iconElement = $('<span class="' + iconSet + ' ' + icon + '"></span>');
+      if (title)
+        iconElement.css('margin-right', '7px');
+      a.append(iconElement);
+      // if href is null see if we can auto-generate based on icon (e.g. social)
+      if (!href)
+        maybeGenerateLinkFromIcon(iconName, a);
+    }
+    if (title)
+      a.append(title);
+
+    // add the href.
+    if (href) {
+      if (href === "source_embed") {
+        a.attr('href', '#');
+        a.attr('data-featherlight', "#flexdashboard-source-code");
+        a.featherlight({
+            beforeOpen: function(event){
+              $('body').addClass('unselectable');
+            },
+            afterClose: function(event){
+              $('body').removeClass('unselectable');
+            }
+        });
+      } else {
+        a.attr('href', href);
+      }
+    }
+
+    // add the arget
+    if (target)
+      a.attr('target', target);
+
+    return a;
+  }
+
+  // auto generate a link from an icon name (e.g. twitter) when possible
+  function maybeGenerateLinkFromIcon(iconName, a) {
+
+     var serviceLinks = {
+      "twitter": "https://twitter.com/share?text=" + encodeURIComponent(document.title) + "&url="+encodeURIComponent(location.href),
+      "facebook": "https://www.facebook.com/sharer/sharer.php?s=100&p[url]="+encodeURIComponent(location.href),
+      "google-plus": "https://plus.google.com/share?url="+encodeURIComponent(location.href),
+      "linkedin": "https://www.linkedin.com/shareArticle?mini=true&url="+encodeURIComponent(location.href) + "&title=" + encodeURIComponent(document.title),
+      "pinterest": "https://pinterest.com/pin/create/link/?url="+encodeURIComponent(location.href) + "&description=" + encodeURIComponent(document.title)
+    };
+
+    var makeSocialLink = function(a, href) {
+      a.attr('href', '#');
+      a.on('click', function(e) {
+        e.preventDefault();
+        window.open(href);
+      });
+    };
+
+    $.each(serviceLinks, function(key, value) {
+      if (iconName.indexOf(key) !== -1)
+        makeSocialLink(a, value);
+    });
+  }
+
+  // layout a dashboard page
+  function layoutDashboardPage(page) {
+
+    // use a page wrapper so that free form content above the
+    // dashboard appears at the top rather than the side (as it
+    // would without the wrapper in a column orientation)
+    var wrapper = $('<div class="dashboard-page-wrapper"></div>');
+    page.wrap(wrapper);
+
+    // if there are no level2 or level3 headers synthesize a level3
+    // header to contain the (e.g. frame it, scroll container, etc.)
+    var headers = page.find('h2,h3');
+    if (headers.length === 0)
+      page.wrapInner('<div class="section level3"></div>');
+
+    // hoist up any content before level 2 or level 3 headers
+    var children = page.children();
+    children.each(function(index) {
+      if ($(this).hasClass('level2') || $(this).hasClass('level3'))
+        return false;
+      $(this).insertBefore(page);
+    });
+
+    // determine orientation and fillPage behavior for distinct media
+    var orientation, fillPage, storyboard;
+
+    // media: mobile phone
+    if (isMobilePhone()) {
+
+      // if there is a sidebar we need to ensure it's content
+      // is properly framed as an h3
+      var sidebar = page.find('.section.sidebar');
+      sidebar.removeClass('sidebar');
+      sidebar.wrapInner('<div class="section level3"></div>');
+      var h2 = sidebar.find('h2');
+      var h3 = $('<h3></h3>');
+      h3.append(h2.contents());
+      h3.insertBefore(h2);
+      h2.detach();
+
+      // wipeout h2 elements then enclose them in a single h2
+      var level2 = page.find('div.section.level2');
+      level2.each(function() {
+        level2.children('h2').remove();
+        level2.children().unwrap();
+      });
+      page.wrapInner('<div class="section level2"></div>');
+
+      // substitute mobile images
+      if (isPortrait()) {
+        var mobileFigures = $('img.mobile-figure');
+        mobileFigures.each(function() {
+          // get the src (might be base64 encoded)
+          var src = $(this).attr('src');
+
+          // find it's peer
+          var id = $(this).attr('data-mobile-figure-id');
+          var img = $('img[data-figure-id=' + id + "]");
+          img.attr('src', src)
+             .attr('width', _options.defaultFigWidthMobile)
+             .attr('height', _options.defaultFigHeightMobile);
+        });
+      }
+
+      // hoist storyboard commentary into it's own section
+      if (page.hasClass('storyboard')) {
+        var commentaryHR = page.find('div.section.level3 hr');
+        commentaryHR.each(function() {
+          var commentary = $(this).nextAll().detach();
+          var commentarySection = $('<div class="section level3"></div>');
+          commentarySection.append(commentary);
+          commentarySection.insertAfter($(this).closest('div.section.level3'));
+          $(this).remove();
+        });
+      }
+
+      // force a non full screen layout by columns
+      orientation = _options.orientation = 'columns';
+      fillPage = _options.fillPage = false;
+      storyboard = _options.storyboard = false;
+
+    // media: desktop
+    } else {
+
+      // determine orientation
+      orientation = page.attr('data-orientation');
+      if (orientation !== 'rows' && orientation != 'columns')
+        orientation = _options.orientation;
+
+      // determine storyboard mode
+      storyboard = page.hasClass('storyboard');
+
+      // fillPage based on options (force for storyboard)
+      fillPage = _options.fillPage || storyboard;
+
+      // handle sidebar
+      var sidebar = page.find('.section.level2.sidebar');
+      if (sidebar.length > 0)
+        layoutSidebar(sidebar, page);
+    }
+
+    // give it and it's parent divs height: 100% if we are in fillPage mode
+    if (fillPage) {
+      page.addClass('vertical-layout-fill');
+      page.css('height', '100%');
+      page.parents('div').css('height', '100%');
+    } else {
+      page.addClass('vertical-layout-scroll');
+    }
+
+    // perform the layout
+    if (storyboard)
+      layoutPageAsStoryboard(page);
+    else if (orientation === 'rows')
+      layoutPageByRows(page, fillPage);
+    else if (orientation === 'columns')
+      layoutPageByColumns(page, fillPage);
+  }
+
+  function layoutSidebar(sidebar, content) {
+
+    // get it out of the header hierarchy
+    sidebar = sidebar.first();
+    if (sidebar.hasClass('level1')) {
+      sidebar.removeClass('level1');
+      sidebar.children('h1').remove();
+    } else if (sidebar.hasClass('level2')) {
+      sidebar.removeClass('level2');
+      sidebar.children('h2').remove();
+    }
+
+    // determine width
+    var sidebarWidth = isTablet() ? 220 : 250;
+    var dataWidth = parseInt(sidebar.attr('data-width'));
+    if (dataWidth)
+      sidebarWidth = dataWidth;
+
+    // set the width and shift the page right to accomodate the sidebar
+    sidebar.css('width', sidebarWidth + 'px');
+    content.css('padding-left', sidebarWidth + 'px');
+
+    // wrap it's contents in a form
+    sidebar.wrapInner($('<form></form>'));
+  }
+
+  function layoutPageAsStoryboard(page) {
+
+    // create storyboard navigation
+    var nav = $('<div class="storyboard-nav"></div>');
+
+    // add navigation buttons
+    var prev = $('<button class="sbprev"><i class="fa fa-angle-left"></i></button>');
+    nav.append(prev);
+    var next= $('<button class="sbnext"><i class="fa fa-angle-right"></i></button>');
+    nav.append(next);
+
+    // add navigation frame
+    var frameList = $('<div class="sbframelist"></div>');
+    nav.append(frameList);
+    var ul = $('<ul></ul>');
+    frameList.append(ul);
+
+     // find all the level3 sections (those are the storyboard frames)
+    var frames = page.find('div.section.level3');
+    frames.each(function() {
+
+      // mark it
+      $(this).addClass('sbframe');
+
+      // divide it into chart content and (optional) commentary
+      $(this).addClass('dashboard-column-orientation');
+
+      // stuff the chart into it's own div w/ flex
+      $(this).wrapInner('<div class="sbframe-component"></div>');
+      setFlex($(this), 1);
+      var frame = $(this).children('.sbframe-component');
+
+      // extract the title from the h3
+      var li = $('<li></li>');
+      var h3 = frame.children('h3');
+      li.append(h3.contents());
+      h3.detach();
+      ul.append(li);
+
+      // extract commentary
+      var hr = frame.children('hr');
+      if (hr.length) {
+        var commentary = hr.nextAll().detach();
+        hr.remove();
+        var commentaryFrame = $('<div class="sbframe-commentary"></div>');
+        commentaryFrame.addClass('flowing-content-shim');
+        commentaryFrame.addClass('flowing-content-container');
+        commentaryFrame.append(commentary);
+        $(this).append(commentaryFrame);
+
+        // look for a data-commentary-width attribute
+        var commentaryWidth = $(this).attr('data-commentary-width');
+        if (commentaryWidth)
+          commentaryFrame.css('width', commentaryWidth + 'px');
+      }
+
+      // layout the chart (force flex)
+      var result = layoutChart(frame, true);
+
+      // ice the notes if there are none
+      if (!result.notes)
+        frame.find('.chart-notes').remove();
+
+      // set flex on chart
+      setFlex(frame, 1);
+    });
+
+    // create a div to hold all the frames
+    var frameContent = $('<div class="sbframe-content"></div>');
+    frameContent.addClass('dashboard-row-orientation');
+    frameContent.append(frames.detach());
+
+    // row orientation to stack nav and frame content
+    page.addClass('dashboard-row-orientation');
+    page.append(nav);
+    page.append(frameContent);
+    setFlex(frameContent, 1);
+
+    // initialize sly
+    var sly = new Sly(frameList, {
+    		horizontal: true,
+    		itemNav: 'basic',
+    		smart: true,
+    		activateOn: 'click',
+    		startAt: 0,
+    		scrollBy: 1,
+    		activatePageOn: 'click',
+    		speed: 200,
+    		moveBy: 600,
+    		dragHandle: true,
+    		dynamicHandle: true,
+    		clickBar: true,
+    		keyboardNavBy: 'items',
+    		next: next,
+    		prev: prev
+    	}).init();
+
+    // make first frame active
+    frames.removeClass('active');
+    frames.first().addClass('active');
+
+    // subscribe to frame changed events
+    sly.on('active', function (eventName, itemIndex) {
+      frames.removeClass('active');
+      frames.eq(itemIndex).addClass('active')
+                          .trigger('shown');
+    });
+  }
+
+  function layoutPageByRows(page, fillPage) {
+
+    // row orientation
+    page.addClass('dashboard-row-orientation');
+
+    // find all the level2 sections (those are the rows)
+    var rows = page.find('div.section.level2');
+
+    // if there are no level2 sections then treat the
+    // entire page as if it's a level 2 section
+    if (rows.length === 0) {
+      page.wrapInner('<div class="section level2"></div>');
+      rows = page.find('div.section.level2');
+    }
+
+    rows.each(function () {
+
+      // flags
+      var haveNotes = false;
+      var haveFlexHeight = true;
+
+      // remove the h2
+      $(this).children('h2').remove();
+
+      // check for a tabset
+      var isTabset = $(this).hasClass('tabset');
+      if (isTabset)
+        layoutTabset($(this));
+
+      // give it row layout semantics if it's not a tabset
+      if (!isTabset)
+        $(this).addClass('dashboard-row');
+
+      // find all of the level 3 subheads
+      var columns = $(this).find('div.section.level3');
+
+      // determine figureSizes sizes
+      var figureSizes = chartFigureSizes(columns);
+
+      // fixup the columns
+      columns.each(function(index) {
+
+        // layout the chart (force flex if we are in a tabset)
+        var result = layoutChart($(this), isTabset);
+
+        // update flexHeight state
+        if (!result.flex)
+          haveFlexHeight = false;
+
+        // update state
+        if (result.notes)
+          haveNotes = true;
+
+        // set the column flex based on the figure width
+        // (value boxes will just get the default figure width)
+        var chartWidth = figureSizes[index].width;
+        setFlex($(this), chartWidth + ' ' + chartWidth + ' 0px');
+
+      });
+
+      // remove empty chart note divs
+      if (isTabset)
+        $(this).find('.chart-notes').filter(function() {
+            return $(this).html() === "&nbsp;";
+        }).remove();
+      if (!haveNotes)
+        $(this).find('.chart-notes').remove();
+
+       // make it a flexbox row
+      if (haveFlexHeight)
+        $(this).addClass('dashboard-row-flex');
+
+      // now we can set the height on all the wrappers (based on maximum
+      // figure height + room for title and notes, or data-height on the
+      // container if specified). However, don't do this if there is
+      // no flex on any of the constituent columns
+      var flexHeight = null;
+      var dataHeight = parseInt($(this).attr('data-height'));
+      if (dataHeight)
+        flexHeight = adjustedHeight(dataHeight, columns.first());
+      else if (haveFlexHeight)
+        flexHeight = maxChartHeight(figureSizes, columns);
+      if (flexHeight) {
+        if (fillPage)
+          setFlex($(this), flexHeight + ' ' + flexHeight + ' 0px');
+        else {
+          $(this).css('height', flexHeight + 'px');
+          setFlex($(this), '0 0 ' + flexHeight + 'px');
+        }
+      }
+
+    });
+  }
+
+  function layoutPageByColumns(page, fillPage) {
+
+    // column orientation
+    page.addClass('dashboard-column-orientation');
+
+    // find all the level2 sections (those are the columns)
+    var columns = page.find('div.section.level2');
+
+    // if there are no level2 sections then treat the
+    // entire page as if it's a level 2 section
+    if (columns.length === 0) {
+      page.wrapInner('<div class="section level2"></div>');
+      columns = page.find('div.section.level2');
+    }
+
+    // layout each column
+    columns.each(function (index) {
+
+      // remove the h2
+      $(this).children('h2').remove();
+
+      // make it a flexbox column
+      $(this).addClass('dashboard-column');
+
+      // check for a tabset
+      var isTabset = $(this).hasClass('tabset');
+      if (isTabset)
+        layoutTabset($(this));
+
+      // find all the h3 elements
+      var rows = $(this).find('div.section.level3');
+
+      // get the figure sizes for the rows
+      var figureSizes = chartFigureSizes(rows);
+
+      // column flex is the max row width (or data-width if specified)
+      var flexWidth;
+      var dataWidth = parseInt($(this).attr('data-width'));
+      if (dataWidth)
+        flexWidth = dataWidth;
+      else
+        flexWidth = maxChartWidth(figureSizes);
+      setFlex($(this), flexWidth + ' ' + flexWidth + ' 0px');
+
+      // layout each chart
+      rows.each(function(index) {
+
+        // perform the layout
+        var result = layoutChart($(this), false);
+
+        // ice the notes if there are none
+        if (!result.notes)
+          $(this).find('.chart-notes').remove();
+
+        // set flex height based on figHeight, then adjust
+        if (result.flex) {
+          var chartHeight = figureSizes[index].height;
+          chartHeight = adjustedHeight(chartHeight, $(this));
+          if (fillPage)
+            setFlex($(this), chartHeight + ' ' + chartHeight + ' 0px');
+          else {
+            $(this).css('height', chartHeight + 'px');
+            setFlex($(this), chartHeight + ' ' + chartHeight + ' ' + chartHeight + 'px');
+          }
+        }
+      });
+    });
+  }
+
+  function chartFigureSizes(charts) {
+
+    // sizes
+    var figureSizes = new Array(charts.length);
+
+    // check each chart
+    charts.each(function(index) {
+
+      // start with default
+      figureSizes[index] = {
+        width: _options.defaultFigWidth,
+        height: _options.defaultFigHeight
+      };
+
+      // look for data-height or data-width then knit options
+      var dataWidth = parseInt($(this).attr('data-width'));
+      var dataHeight = parseInt($(this).attr('data-height'));
+      var knitrOptions = $(this).find('.knitr-options:first');
+      var knitrWidth, knitrHeight;
+      if (knitrOptions) {
+        knitrWidth = parseInt(knitrOptions.attr('data-fig-width'));
+        knitrHeight =  parseInt(knitrOptions.attr('data-fig-height'));
+      }
+
+      // width
+      if (dataWidth)
+        figureSizes[index].width = dataWidth;
+      else if (knitrWidth)
+        figureSizes[index].width = knitrWidth;
+
+      // height
+      if (dataHeight)
+        figureSizes[index].height = dataHeight;
+      else if (knitrHeight)
+        figureSizes[index].height = knitrHeight;
+    });
+
+    // return sizes
+    return figureSizes;
+  }
+
+  function maxChartHeight(figureSizes, charts) {
+
+    // first compute the maximum height
+    var maxHeight = _options.defaultFigHeight;
+    for (var i = 0; i<figureSizes.length; i++)
+      if (figureSizes[i].height > maxHeight)
+        maxHeight = figureSizes[i].height;
+
+    // now add offests for chart title and chart notes
+    if (charts.length)
+      maxHeight = adjustedHeight(maxHeight, charts.first());
+
+    return maxHeight;
+  }
+
+  function adjustedHeight(height, chart) {
+    if (chart.length > 0) {
+      var chartTitle = chart.find('.chart-title');
+      if (chartTitle.length)
+        height += chartTitle.first().outerHeight();
+      var chartNotes = chart.find('.chart-notes');
+      if (chartNotes.length)
+        height += chartNotes.first().outerHeight();
+    }
+    return height;
+  }
+
+  function maxChartWidth(figureSizes) {
+    var maxWidth = _options.defaultFigWidth;
+    for (var i = 0; i<figureSizes.length; i++)
+      if (figureSizes[i].width > maxWidth)
+        maxWidth = figureSizes[i].width;
+    return maxWidth;
+  }
+
+  // layout a chart
+  function layoutChart(chart, forceFlex) {
+
+    // state to return
+    var result = {
+      notes: false,
+      flex: false
+    };
+
+    // extract the title
+    var title = extractTitle(chart);
+
+    // find components that apply to this container
+    var components = componentsFind(chart);
+
+    // if it's a custom component then call it and return
+    var customComponents = componentsCustom(components);
+    if (customComponents.length) {
+      componentsLayout(customComponents, title, chart);
+      result.notes = false;
+      result.flex = forceFlex || componentsFlex(customComponents);
+      return result;
+    }
+
+    // put all the content in a chart wrapper div
+    chart.addClass('chart-wrapper');
+    chart.wrapInner('<div class="chart-stage"></div>');
+    var chartContent = chart.children('.chart-stage');
+
+    // flex the content if appropriate
+    result.flex = forceFlex || componentsFlex(components);
+    if (result.flex) {
+      // add flex classes
+      chart.addClass('chart-wrapper-flex');
+      chartContent.addClass('chart-stage-flex');
+
+      // additional shim to break out of flexbox sizing
+      chartContent.wrapInner('<div class="chart-shim"></div>');
+      chartContent = chartContent.children('.chart-shim');
+    }
+
+    // set custom data-padding attribute
+    var pad = chart.attr('data-padding');
+    if (pad) {
+      if (pad === "0")
+        chart.addClass('no-padding');
+      else {
+        pad = pad + 'px';
+        chartContent.css('left', pad)
+                    .css('top', pad)
+                    .css('right', pad)
+                    .css('bottom', pad)
+      }
+    }
+
+    // call compoents
+    componentsLayout(components, title, chartContent);
+
+    // also activate components on shiny output
+    findShinyOutput(chartContent).on('shiny:value',
+      function(event) {
+        var element = $(event.target);
+        setTimeout(function() {
+
+          // see if we opted out of flex based on our output (for shiny
+          // we can't tell what type of output we have until after the
+          // value is bound)
+          var components = componentsFind(element);
+          var flex = forceFlex || componentsFlex(components);
+          if (!flex) {
+            chart.css('height', "");
+            setFlex(chart, "");
+            chart.removeClass('chart-wrapper-flex');
+            chartContent.removeClass('chart-stage-flex');
+            chartContent.children().unwrap();
+          }
+
+          // perform layout
+          componentsLayout(components, title, element.parent());
+        }, 10);
+      });
+
+    // add the title
+    var chartTitle = $('<div class="chart-title"></div>');
+    chartTitle.append(title);
+    chart.prepend(chartTitle);
+
+    // add the notes section
+    var chartNotes = $('<div class="chart-notes"></div>');
+    chartNotes.html('&nbsp;');
+    chart.append(chartNotes);
+
+    // attempt to extract notes if we have a component
+    if (components.length)
+      result.notes = extractChartNotes(chartContent, chartNotes);
+
+    // return result
+    return result;
+  }
+
+  // build a tabset from a section div with the .tabset class
+  function layoutTabset(tabset) {
+
+    // check for fade option
+    var fade = tabset.hasClass("tabset-fade");
+    var navClass = "nav-tabs";
+
+    // determine the heading level of the tabset and tabs
+    var match = tabset.attr('class').match(/level(\d) /);
+    if (match === null)
+      return;
+    var tabsetLevel = Number(match[1]);
+    var tabLevel = tabsetLevel + 1;
+
+    // find all subheadings immediately below
+    var tabs = tabset.find("div.section.level" + tabLevel);
+    if (!tabs.length)
+      return;
+
+    // create tablist and tab-content elements
+    var tabList = $('<ul class="nav ' + navClass + '" role="tablist"></ul>');
+    $(tabs[0]).before(tabList);
+    var tabContent = $('<div class="tab-content"></div>');
+    $(tabs[0]).before(tabContent);
+
+    // build the tabset
+    tabs.each(function(i) {
+
+      // get the tab div
+      var tab = $(tabs[i]);
+
+      // get the id then sanitize it for use with bootstrap tabs
+      var id = tab.attr('id');
+
+      // sanitize the id for use with bootstrap tabs
+      id = id.replace(/[.\/?&!#<>]/g, '').replace(/\s/g, '_');
+      tab.attr('id', id);
+
+      // get the heading element within it and grab it's text
+      var heading = tab.find('h' + tabLevel + ':first');
+      var headingDom = heading.contents();
+
+      // build and append the tab list item
+      var a = $('<a role="tab" data-toggle="tab"></a>');
+      a.append(headingDom);
+      a.attr('href', '#' + id);
+      a.attr('aria-controls', id);
+      var li = $('<li role="presentation"></li>');
+      li.append(a);
+      if (i === 0)
+        li.attr('class', 'active');
+      tabList.append(li);
+
+      // set it's attributes
+      tab.attr('role', 'tabpanel');
+      tab.addClass('tab-pane');
+      tab.addClass('tabbed-pane');
+      tab.addClass('no-title');
+      if (fade)
+        tab.addClass('fade');
+      if (i === 0) {
+        tab.addClass('active');
+        if (fade)
+          tab.addClass('in');
+      }
+
+      // move it into the tab content div
+      tab.detach().appendTo(tabContent);
+    });
+
+    // add nav-tabs-custom
+    tabset.addClass('nav-tabs-custom');
+
+    // internal layout is dashboard-column with tab-content flexing
+    tabset.addClass('dashboard-column');
+    setFlex(tabContent, 1);
+  }
+
+  // one time global initialization for components
+  function componentsInit(dashboardContainer) {
+    for (var i=0; i<window.FlexDashboardComponents.length; i++) {
+      var component = window.FlexDashboardComponents[i];
+      if (component.init)
+        component.init(dashboardContainer);
+    }
+  }
+
+  // find components that apply within a container
+  function componentsFind(container) {
+
+    // look for components
+    var components = [];
+    for (var i=0; i<window.FlexDashboardComponents.length; i++) {
+      var component = window.FlexDashboardComponents[i];
+      if (component.find(container).length)
+        components.push(component);
+    }
+
+    // if there were none then use a special flowing content component
+    // that just adds a scrollbar in fillPage mode
+    if (components.length == 0) {
+      components.push({
+        find: function(container) {
+          return container;
+        },
+
+        flex: function(fillPage) {
+          return fillPage;
+        },
+
+        layout: function(title, container, element, fillPage) {
+          if (fillPage) {
+            container.addClass('flowing-content-shim');
+            container.addClass('flowing-content-container');
+          }
+        }
+      });
+    }
+
+    return components;
+  }
+
+  // if there is a custom component then pick it out
+  function componentsCustom(components) {
+    var customComponent = [];
+    for (var i=0; i<components.length; i++)
+      if (components[i].type === "custom") {
+        customComponent.push(components[i]);
+        break;
+      }
+    return customComponent;
+  }
+
+  // query all components for flex
+  function componentsFlex(components) {
+
+    // no components at all means no flex
+    if (components.length === 0)
+      return false;
+
+    // otherwise query components (assume true unless we see false)
+    var isMobile = isMobilePhone();
+    for (var i=0; i<components.length; i++)
+      if (components[i].flex && !components[i].flex(_options.fillPage))
+        return false;
+    return true;
+  }
+
+  // layout all components
+  function componentsLayout(components, title, container) {
+    var isMobile = isMobilePhone();
+    for (var i=0; i<components.length; i++) {
+      var element = components[i].find(container);
+      if (components[i].layout) {
+        // call layout (don't call other components if it returns false)
+        var result = components[i].layout(title, container, element, _options.fillPage);
+        if (result === false)
+          return;
+      }
+    }
+  }
+
+  // get a reference to the h3, discover it's inner html, and remove it
+  function extractTitle(container) {
+    var h3 = container.children('h3').first();
+    var title = '';
+    if (!container.hasClass('no-title'))
+      title = h3.contents();
+    h3.detach();
+    return title;
+  }
+
+  // extract chart notes
+  function extractChartNotes(chartContent, chartNotes) {
+    // look for a terminating blockquote or image caption
+    var blockquote = chartContent.children('blockquote:last-child');
+    var caption = chartContent.children('div.image-container')
+                              .children('p.caption');
+    if (blockquote.length) {
+      chartNotes.empty().append(blockquote.children('p:first-child').contents());
+      blockquote.remove();
+      return true;
+    } else if (caption.length) {
+      chartNotes.empty().append(caption.contents());
+      caption.remove();
+      return true;
+    } else {
+      return false;
+    }
+  }
+
+  function findShinyOutput(chartContent) {
+    return chartContent.find('.shiny-text-output, .shiny-html-output');
+  }
+
+  // safely detect rendering on a mobile phone
+  function isMobilePhone() {
+    try
+    {
+      return ! window.matchMedia("only screen and (min-width: 768px)").matches;
+    }
+    catch(e) {
+      return false;
+    }
+  }
+
+  function isFillPage() {
+    return _options.fillPage;
+  }
+
+  // detect portrait mode
+  function isPortrait() {
+    return ($(window).width() < $(window).height());
+  }
+
+  // safely detect rendering on a tablet
+  function isTablet() {
+    try
+    {
+      return window.matchMedia("only screen and (min-width: 769px) and (max-width: 992px)").matches;
+    }
+    catch(e) {
+      return false;
+    }
+  }
+
+  // test whether this is a shiny doc
+  function isShinyDoc() {
+    return (typeof(window.Shiny) !== "undefined" && !!window.Shiny.outputBindings);
+  }
+
+  // set flex using vendor specific prefixes
+  function setFlex(el, flex) {
+    el.css('-webkit-box-flex', flex)
+      .css('-webkit-flex', flex)
+      .css('-ms-flex', flex)
+      .css('flex', flex);
+  }
+
+  // support bookmarking of pages
+  function handleLocationHash() {
+
+    // restore tab/page from bookmark
+    var hash = window.decodeURIComponent(window.location.hash);
+    if (hash.length > 0)
+      $('ul.nav a[href="' + hash + '"]').tab('show');
+    FlexDashboardUtils.manageActiveNavbarMenu();
+
+    // navigate to a tab when the history changes
+    window.addEventListener("popstate", function(e) {
+      var hash = window.decodeURIComponent(window.location.hash);
+      var activeTab = $('ul.nav a[href="' + hash + '"]');
+      if (activeTab.length) {
+        activeTab.tab('show');
+      } else {
+        $('ul.nav a:first').tab('show');
+      }
+      FlexDashboardUtils.manageActiveNavbarMenu();
+    });
+
+    // add a hash to the URL when the user clicks on a tab/page
+    $('.navbar-nav a[data-toggle="tab"]').on('click', function(e) {
+      var baseUrl = FlexDashboardUtils.urlWithoutHash(window.location.href);
+      var hash = FlexDashboardUtils.urlHash($(this).attr('href'));
+      var href = baseUrl + hash;
+      FlexDashboardUtils.setLocation(href);
+    });
+
+    // handle clicks of other links that should activate pages
+    var navPages = $('ul.navbar-nav li a[data-toggle=tab]');
+    navPages.each(function() {
+      var href =  $(this).attr('href');
+      var links = $('a[href="' + href + '"][data-toggle!=tab]');
+      links.each(function() {
+        $(this).on('click', function(e) {
+          window.FlexDashboardUtils.showPage(href);
+        });
+      });
+    });
+  }
+
+  // tweak Prism highlighting
+  function initPrismHighlighting() {
+
+    if (window.Prism) {
+      Prism.languages.insertBefore('r', 'comment', {
+        'heading': [
+          {
+            // title 1
+        	  // =======
+
+        	  // title 2
+        	  // -------
+        	  pattern: /\w+.*(?:\r?\n|\r)(?:====+|----+)/,
+            alias: 'operator'
+          },
+          {
+            // ### title 3
+            pattern: /(^\s*)###[^#].+/m,
+            lookbehind: true,
+            alias: 'operator'
+          }
+        ]
+      });
+
+      // prism highlight
+      Prism.highlightAll();
+    }
+  }
+
+
+  // get theme color
+  var themeColors = {
+    bootstrap: {
+      primary: "rgba(51, 122, 183, 0.4)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    cerulean: {
+      primary: "rgb(47, 164, 231)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    journal: {
+      primary: "rgba(235, 104, 100, 0.70)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    flatly: {
+      primary: "rgba(44, 62, 80, 0.70)",
+      info: "rgba(52, 152, 219, 0.70)",
+      success: "rgba(24, 188, 156, 0.70)",
+      warning: "rgba(243, 156, 18, 0.70)",
+      danger: "rgba(231, 76, 60, 0.70)"
+    },
+    readable: {
+      primary: "rgba(69, 130, 236, 0.4)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    spacelab: {
+      primary: "rgba(68, 110, 155, 0.25)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    united: {
+      primary: "rgba(221, 72, 20, 0.30)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    cosmo: {
+      primary: "rgba(39, 128, 227, 0.7)",
+      info: "rgba(153, 84, 187, 0.7)",
+      success: "rgba(63, 182, 24, 0.7)",
+      warning: "rgba(255, 117, 24, 0.7)",
+      danger: "rgba(255, 0, 57, 0.7)"
+    },
+    lumen: {
+      primary: "rgba(21, 140, 186, 0.70)",
+      info: "rgba(117, 202, 235, 0.90)",
+      success: "rgba(40, 182, 44, 0.70)",
+      warning: "rgba(255, 133, 27, 0.70)",
+      danger: "rgba(255, 65, 54, 0.70)"
+    },
+    paper: {
+      primary: "rgba(33, 150, 243, 0.35)",
+      info: "rgb(225, 190, 231)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(255, 224, 178)",
+      danger: "rgb(249, 189, 187)"
+    },
+    sandstone: {
+      primary: "rgba(50, 93, 136, 0.3)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    simplex: {
+      primary: "rgba(217, 35, 15, 0.25)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    },
+    yeti: {
+      primary: "rgba(0, 140, 186, 0.298039)",
+      info: "rgb(217, 237, 247)",
+      success: "rgb(223, 240, 216)",
+      warning: "rgb(252, 248, 227)",
+      danger: "rgb(242, 222, 222)"
+    }
+  }
+  function themeColor(color) {
+    return themeColors[_options.theme][color];
+  }
+
+  FlexDashboard.prototype = {
+    constructor: FlexDashboard,
+    init: init,
+    isMobilePhone: isMobilePhone,
+    isFillPage: isFillPage,
+    themeColor: themeColor
+  };
+
+  return FlexDashboard;
+
+})();
+
+// utils
+window.FlexDashboardUtils = {
+  resizableImage: function(img) {
+    var src = img.attr('src');
+    var url = 'url("' + src + '")';
+    img.parent().css('background', url)
+                .css('background-size', 'contain')
+                .css('background-repeat', 'no-repeat')
+                .css('background-position', 'center')
+                .addClass('image-container');
+  },
+  setLocation: function(href) {
+    if (history && history.pushState) {
+      history.pushState(null, null, href);
+    } else {
+      window.location.replace(href);
+    }
+    setTimeout(function() {
+        window.scrollTo(0, 0);
+    }, 10);
+    this.manageActiveNavbarMenu();
+  },
+  showPage: function(href) {
+    $('ul.navbar-nav li a[href="' + href + '"]').tab('show');
+    var baseUrl = this.urlWithoutHash(window.location.href);
+    var loc = baseUrl + href;
+    this.setLocation(loc);
+  },
+  showLinkedValue: function(href) {
+    // check for a page link
+    if ($('ul.navbar-nav li a[data-toggle=tab][href="' + href + '"]').length > 0)
+      this.showPage(href);
+    else
+      window.open(href);
+  },
+  urlWithoutHash: function(url) {
+    var hashLoc = url.indexOf('#');
+    if (hashLoc != -1)
+      return url.substring(0, hashLoc);
+    else
+      return url;
+  },
+  urlHash: function(url) {
+    var hashLoc = url.indexOf('#');
+    if (hashLoc != -1)
+      return url.substring(hashLoc);
+    else
+      return "";
+  },
+  manageActiveNavbarMenu: function () {
+    // remove active from anyone currently active
+    $('.navbar ul.nav').find('li').removeClass('active');
+    // find the active tab
+    var activeTab = $('.dashboard-page-wrapper.tab-pane.active');
+    if (activeTab.length > 0) {
+      var tabId = activeTab.attr('id');
+      if (tabId)
+        $(".navbar ul.nav a[href='#" + tabId + "']").parents('li').addClass('active');
+    }
+  }
+};
+
+window.FlexDashboard = new FlexDashboard();
+
+// empty content
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    if (container.find('p').length == 0)
+      return container;
+    else
+      return $();
+  }
+})
+
+// plot image
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('p')
+                    .children('img:only-child');
+  },
+
+  layout: function(title, container, element, fillPage) {
+    FlexDashboardUtils.resizableImage(element);
+  }
+});
+
+// plot image (figure style)
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('div.figure').children('img');
+  },
+
+  layout: function(title, container, element, fillPage) {
+    FlexDashboardUtils.resizableImage(element);
+  }
+});
+
+// htmlwidget
+window.FlexDashboardComponents.push({
+
+  init: function(dashboardContainer) {
+    // trigger "shown" after initial layout to force static htmlwidgets
+    // in runtime: shiny to be resized after the dom has been transformed
+    dashboardContainer.on('flexdashboard:layoutcomplete', function(event) {
+      setTimeout(function() {
+        dashboardContainer.trigger('shown');
+      }, 200);
+    });
+  },
+
+  find: function(container) {
+    return container.children('div[id^="htmlwidget-"],div.html-widget');
+  }
+});
+
+// gauge
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.children('div.html-widget.gauge');
+  },
+
+  flex: function(fillPage) {
+    return false;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+
+  }
+
+});
+
+// shiny output
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    return container.children('div[class^="shiny-"]');
+  }
+});
+
+// datatables
+window.FlexDashboardComponents.push({
+  find: function(container) {
+    return container.find('.datatables');
+  },
+  flex: function(fillPage) {
+    return fillPage;
+  }
+});
+
+// bootstrap table
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    var bsTable = container.find('table.table');
+    if (bsTable.length !== 0)
+      return bsTable;
+    else
+      return container.find('tr.header').parent('thead').parent('table');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+    // alias variables
+    var bsTable = element;
+
+    // fixup xtable generated tables with a proper thead
+    var headerRow = bsTable.find('tbody > tr:first-child > th').parent();
+    if (headerRow.length > 0) {
+      var thead = $('<thead></thead>');
+      bsTable.prepend(thead);
+      headerRow.detach().appendTo(thead);
+    }
+
+    // improve appearance
+    container.addClass('bootstrap-table');
+
+    // for fill page provide scrolling w/ sticky headers
+    if (fillPage) {
+      // force scrollbar on overflow
+      container.addClass('flowing-content-shim');
+
+      // stable table headers when scrolling
+      bsTable.stickyTableHeaders({
+        scrollableArea: container
+      });
+    }
+  }
+});
+
+// embedded shiny app
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.find('iframe.shiny-frame');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+    if (fillPage) {
+      element.attr('height', '100%');
+    } else {
+      // provide default height if necessary
+      var height = element.get(0).style.height;
+      if (!height)
+        height = element.attr('height');
+      if (!height)
+        element.attr('height', 500);
+    }
+  }
+});
+
+// shiny fillRow or fillCol
+window.FlexDashboardComponents.push({
+
+  find: function(container) {
+    return container.find('.flexfill-container');
+  },
+
+  flex: function(fillPage) {
+    return fillPage;
+  },
+
+  layout: function(title, container, element, fillPage) {
+    if (fillPage)
+      element.css('height', '100%');
+    else {
+      // provide default height if necessary
+      var height = element.get(0).style.height;
+      if (height === "100%" || height === "auto" || height === "initial" ||
+          height === "inherit" || !height) {
+        element.css('height', 500);
+      }
+    }
+  }
+});
+
+// valueBox
+window.FlexDashboardComponents.push({
+
+  type: "custom",
+
+  find: function(container) {
+    if (container.find('span.value-output, .shiny-valuebox-output').length)
+      return container;
+    else
+      return $();
+  },
+
+  flex: function(fillPage) {
+    return false;
+  },
+
+  layout: function(title, container, element, fillPage) {
+
+    // alias variables
+    var chartTitle = title;
+    var valueBox = element;
+
+    // add value-box class to container
+    container.addClass('value-box');
+
+    // value paragraph
+    var value = $('<p class="value"></p>');
+
+    // if we have shiny-text-output then just move it in
+    var valueOutputSpan = [];
+    var shinyOutput = valueBox.find('.shiny-valuebox-output').detach();
+    if (shinyOutput.length) {
+      valueBox.children().remove();
+      shinyOutput.html("&mdash;");
+      value.append(shinyOutput);
+    } else {
+      // extract the value (remove leading vector index)
+      var chartValue = valueBox.text().trim();
+      chartValue = chartValue.replace("[1] ", "");
+      valueOutputSpan = valueBox.find('span.value-output').detach();
+      valueBox.children().remove();
+      value.text(chartValue);
+    }
+
+    // caption
+    var caption = $('<p class="caption"></p>');
+    caption.append(chartTitle);
+
+    // build inner div for value box and add it
+    var inner = $('<div class="inner"></div>');
+    inner.append(value);
+    inner.append(caption);
+    valueBox.append(inner);
+
+    // add icon if specified
+    var icon = $('<div class="icon"><i></i></div>');
+    valueBox.append(icon);
+    function setIcon(chartIcon) {
+      var iconLib = "";
+      var iconSplit = chartIcon.split(" ");
+      if (iconSplit.length > 1) {
+        iconLib = iconSplit[0];
+        chartIcon = iconSplit.slice(1).join(" ");
+      } else {
+        var components = chartIcon.split("-");
+        if (components.length > 1)
+          iconLib = components[0];
+      }
+      icon.children('i').attr('class', iconLib + ' ' + chartIcon);
+    }
+    var chartIcon = valueBox.attr('data-icon');
+    if (chartIcon)
+      setIcon(chartIcon);
+
+    // set color based on data-background if necessary
+    var dataBackground = valueBox.attr('data-background');
+    if (dataBackground)
+      valueBox.css('background-color', bgColor);
+    else {
+      // default to bg-primary if no other background is specified
+      if (!valueBox.hasClass('bg-primary') &&
+          !valueBox.hasClass('bg-info') &&
+          !valueBox.hasClass('bg-warning') &&
+          !valueBox.hasClass('bg-success') &&
+          !valueBox.hasClass('bg-danger')) {
+        valueBox.addClass('bg-primary');
+      }
+    }
+
+    // handle data attributes in valueOutputSpan
+    function handleValueOutput(valueOutput) {
+
+      // caption
+      var dataCaption = valueOutput.attr('data-caption');
+      if (dataCaption)
+        caption.html(dataCaption);
+
+      // icon
+      var dataIcon = valueOutput.attr('data-icon');
+      if (dataIcon)
+        setIcon(dataIcon);
+
+      // color
+      var dataColor = valueOutput.attr('data-color');
+      if (dataColor) {
+        if (dataColor.indexOf('bg-') === 0) {
+          valueBox.css('background-color', '');
+          if (!valueBox.hasClass(dataColor)) {
+             valueBox.removeClass('bg-primary bg-info bg-warning bg-danger bg-success');
+             valueBox.addClass(dataColor);
+          }
+        } else {
+          valueBox.removeClass('bg-primary bg-info bg-warning bg-danger bg-success');
+          valueBox.css('background-color', dataColor);
+        }
+      }
+
+      // url
+      var dataHref = valueOutput.attr('data-href');
+      if (dataHref) {
+        valueBox.addClass('linked-value');
+        valueBox.off('click.value-box');
+        valueBox.on('click.value-box', function(e) {
+          window.FlexDashboardUtils.showLinkedValue(dataHref);
+        });
+      }
+    }
+
+    // check for a valueOutputSpan
+    if (valueOutputSpan.length > 0) {
+      handleValueOutput(valueOutputSpan);
+    }
+
+    // if we have a shinyOutput then bind a listener to handle
+    // new valueOutputSpan values
+    shinyOutput.on('shiny:value',
+      function(event) {
+        var element = $(event.target);
+        setTimeout(function() {
+          var valueOutputSpan = element.find('span.value-output');
+          if (valueOutputSpan.length > 0)
+            handleValueOutput(valueOutputSpan);
+        }, 10);
+      }
+    );
+  }
+});
+</script>
+
+<div id="dashboard-container">
+
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="column" class="section level2" data-width="650">
+<h2 data-width="650">Column</h2>
+<div id="chart-a" class="section level3">
+<h3>Chart A</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="htmlwidget-3c4f1141d0547f64f87b" style="width:576px;height:460.8px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-3c4f1141d0547f64f87b">{"x":{"visdat":{"83ab28336669":["function () ","plotlyVisDat"]},"cur_data":"83ab28336669","attrs":{"83ab28336669":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"bar"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"month","type":"category","categoryorder":"array","categoryarray":["01","02","03","04","05","10","11","12"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"snow"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":["01","01","01","01","01","01","01","01","02","03","03","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","01","01","01","01","01","01","02","02","02","02","02","02","02","02","03","03","12","12","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","12","12","02","02","02","02","02","02","02","02","02","02","02","02","02","03","11","11","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","11","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","01","01","01","02","02","02","02","02","02","02","02","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","05","11","11","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","12","01","01","02","02","02","02","02","02","02","02","12","12","01","01","01","01","01","01","02","02","02","02","02","02","02","02","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","05","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","01","01","01","02","02","02","02","02","02","02","12","12","01","01","01","02","02","02","02","02","02","02","02","03","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","03","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","02","02","02","02","02","03","12","12","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","11","12","12","12","12","12","12","12","12","12","01","02","03","12","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","03","12","12","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","03","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","11","12","12","12","02","02","03","03","12","12","01","01","01","02","02","02","02","02","12","12","12","01","02","02","02","02","03","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","12","12","12","12","12","12","12","12","12","01","01","01","01","02","02","02","02","12","12","12","12","12","12","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","03","03","12","12","02","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","04","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","02","12","12","12","12","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","03","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","12","12","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","03","03","03","04","10","11","11","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","03","03","03","03","04","04","05","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","02","02","02","02","02","02","03","12","12","12","12","12","12","12","12","01","01","01","01","01","02","02","02","02","02","02","02","03","03","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","11","11","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","04","04","05","05","10","10","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","03","03","03","11","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","02","02","02","12","12","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","03","12","01","01","01","01","01","01","01","01","01","01","02","02","02","03","03","03","04","05","10","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","02","02","02","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","04","04","11","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","12","12","12","12","12","12","12","01","01","01","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","12","11","12","12","12","12","01","01","01","02","02","02","02","02","02","02","01","01","01","02","03","03","12","12","01","01","01","02","02","02","02","02","12","12","01","01","01","01","01","02","02","02","02","02","02","02","02","03","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","11","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","03","03","03","03","03","03","05","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","03","04","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","02","02","02","12","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","03","04","11","12","01","01","01","01","02","02","02","02","02","02","02","02","02","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","04","04","05","11","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","11","11","12","12","12","12","12","12","12","12","01","01","01","02","02","02","02","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","02","02","02","02","02","02","02","12","12","02","02","02","12","12","12","12","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","12","12","12","01","01","01","01","01","02","02","02","02","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","02","02","02","02","02","12","02","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","02","02","02","02","02","02","11","12","12","12","01","01","01","01","01","02","02","02","02","02","02","02","02","04","11","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","02","02","02","02","12","02","02","02","02","02","12"],"y":[64,25,38,76,25,25,38,38,51,25,25,25,25,25,8,25,81,25,152,102,51,25,25,51,51,25,51,13,25,76,51,25,13,25,254,51,38,23,20,81,5,25,3,23,25,104,25,25,178,23,5,18,3,254,76,25,25,51,25,51,51,51,25,25,51,25,51,25,25,76,76,25,76,25,406,330,178,127,51,178,51,102,25,25,23,8,43,38,36,48,15,10,8,13,114,109,112,43,38,25,79,30,38,36,15,3,51,13,15,5,41,23,89,257,218,130,53,28,53,48,28,28,10,8,18,81,48,28,43,18,18,13,66,13,20,71,99,25,23,28,48,467,53,53,8,53,15,43,206,193,53,30,8,15,79,91,97,18,36,33,43,10,10,25,51,25,13,25,13,25,25,51,25,25,102,25,51,406,51,51,51,51,25,13,25,20,13,33,28,38,41,36,18,28,15,10,41,8,20,13,5,18,15,13,18,38,5,8,15,127,56,20,76,66,10,20,23,18,48,5,13,102,51,152,114,127,13,25,25,25,76,76,76,51,25,38,15,13,76,51,25,25,152,203,152,51,89,89,152,25,305,127,25,25,13,13,51,25,30,13,25,36,25,25,25,25,25,102,51,25,51,25,25,25,25,25,25,51,51,25,51,51,25,25,51,25,51,25,51,25,51,152,178,51,25,51,76,102,25,25,25,13,51,51,25,13,25,25,13,18,20,23,13,33,15,23,46,66,64,5,41,160,38,259,28,892,86,23,41,18,15,36,8,312,8,58,33,61,46,41,25,8,33,3,5,8,43,13,13,71,94,64,18,13,10,46,43,33,38,18,132,112,30,305,13,33,5,20,71,5,28,8,13,23,25,8,18,20,33,53,25,5,203,89,127,51,13,13,25,20,114,13,102,25,64,25,25,76,20,25,18,79,43,13,38,15,76,279,13,13,25,38,30,23,71,13,84,38,279,25,13,3,51,25,191,13,102,10,239,112,130,241,292,107,25,13,20,8,18,51,20,30,107,305,13,173,127,71,76,25,193,267,58,97,30,8,20,13,61,30,102,64,109,97,13,33,25,38,61,41,112,81,46,145,76,30,191,10,15,89,13,20,30,127,213,46,114,114,97,356,107,76,76,51,13,58,33,8,13,25,56,20,38,94,53,191,30,81,8,165,25,3,3,10,41,5,330,36,8,8,13,43,254,86,38,178,64,38,381,38,51,25,25,41,56,30,33,43,165,25,20,51,51,305,152,51,51,51,76,76,51,51,51,76,51,51,38,76,102,152,25,13,152,13,38,13,13,38,13,51,13,267,368,102,5,76,38,76,84,231,46,302,180,104,5,53,140,13,18,46,13,46,89,15,46,18,13,41,41,5,61,89,71,25,13,102,20,30,10,5,99,122,246,41,175,185,41,58,23,10,5,51,229,25,10,127,51,13,41,10,18,10,28,5,25,76,25,25,25,13,25,25,356,102,76,25,13,13,229,38,13,20,25,10,13,25,25,15,13,51,8,25,5,25,23,25,51,38,25,13,127,25,457,356,102,38,46,178,152,25,5,25,64,51,36,5,79,3,10,43,15,10,41,15,25,15,10,66,41,18,8,30,10,10,41,231,43,71,8,20,28,10,15,3,8,13,33,10,25,38,28,18,13,25,18,51,25,25,76,38,25,127,76,51,25,25,25,64,25,25,25,76,102,51,13,13,64,102,25,457,305,127,127,25,51,25,25,25,25,152,25,38,64,25,64,15,5,13,38,10,5,25,20,38,38,38,5,3,64,38,20,10,8,76,25,13,20,178,46,559,64,38,13,15,5,25,76,51,152,25,51,51,114,51,13,13,51,51,51,76,38,343,51,178,51,102,51,279,38,25,109,51,15,30,48,41,259,127,165,216,48,76,135,25,33,51,25,330,13,25,51,76,279,25,51,25,127,51,25,76,3,25,203,25,25,584,51,762,229,102,51,152,51,13,10,61,25,56,71,381,3,3,28,69,102,20,51,25,25,25,25,102,46,51,48,107,51,3,13,25,25,25,66,76,25,76,13,13,51,254,13,51,25,25,25,25,18,38,25,38,25,25,51,76,38,13,25,25,102,51,25,64,51,25,38,25,38,51,13,13,13,102,102,102,25,25,38,38,102,25,102,76,178,127,76,51,38,13,25,51,13,25,152,216,25,102,76,25,25,25,51,13,38,13,13,13,5,25,25,13,51,25,64,38,64,13,25,457,25,51,38,51,13,13,51,51,25,13,13,13,64,236,551,279,152,127,51,140,51,8,13,25,20,20,13,107,5,5,25,28,33,53,25,76,5,25,28,13,25,8,28,64,28,43,13,25,160,38,38,3,13,25,5,3,107,13,13,13,3,76,229,203,76,51,38,76,25,102,89,76,38,13,51,38,38,191,51,13,13,25,13,25,25,13,51,25,64,25,13,38,38,13,51,25,51,51,25,51,127,76,38,25,13,13,76,13,13,13,25,25,51,13,38,51,64,25,13,25,25,13,64,13,13,8,25,38,13,38,13,76,13,13,25,152,76,76,51,76,13,13,25,76,25,8,23,15,13,25,13,51,13,13,5,8,64,8,15,28,13,8,51,152,46,102,13,25,3,76,25,76,41,13,30,8,56,25,15,5,13,13,43,5,13,13,5,64,114,51,30,28,33,3,25,130,48,18,28,23,15,25,20,51,46,13,3,10,20,30,107,30,18,15,76,457,94,61,5,25,10,30,10,38,30,51,5,81,51,8,152,229,330,36,25,3,76,64,13,8,13,15,58,58,13,20,25,10,76,43,18,25,13,38,8,81,20,3,114,51,76,13,8,51,13,114,102,127,203,64,64,8,13,165,102,76,8,13,8,46,13,13,13,13,13,25,51,152,51,51,25,51,51,13,25,25,51,25,25,51,13,25,13,51,51,51,51,102,102,152,51,25,76,76,13,51,152,51,25,51,51,13,102,51,51,25,51,76,25,51,25,127,76,13,51,89,10,25,102,25,28,25,117,25,254,18,51,25,114,25,25,25,76,102,102,25,51,25,76,51,25,51,102,25,406,559,38,25,51,102,51,102,102,76,38,13,102,76,51,25,25,38,25,25,76,102,76,25,127,51,76,51,102,38,102,102,152,38,64,102,102,152,254,254,254,51,178,152,191,127,25,25,89,56,152,13,132,81,64,5,13,79,51,30,15,30,38,13,25,51,51,13,25,51,30,20,20,25,38,117,8,20,25,71,305,25,76,13,5,13,53,5,46,178,20,76,13,13,51,25,13,13,13,25,20,13,13,13,46,30,69,38,15,30,8,10,41,13,5,10,46,28,38,122,33,25,13,10,10,5,20,25,51,20,8,160,33,20,102,76,13,13,13,13,25,3,18,30,13,13,3,51,13,152,76,38,25,38,38,13,25,51,13,64,102,13,13,13,25,25,13,38,64,25,89,13,13,38,102,102,89,13,318,38,64,13,13,38,25,13,25,38,152,152,13,152,25,64,51,13,13,13,64,38,25,66,71,30,124,41,46,5,46,13,23,15,91,20,130,79,23,25,13,48,43,74,5,3,33,140,64,64,25,25,102,38,13,51,76,38,13,25,38,25,13,25,13,13,13,76,51,13,13,25,38,25,102,8,18,25,51,203,38,152,25,5,20,25,56,25,76,13,13,38,13,13,25,25,13,5,51,58,330,43,318,178,229,8,15,25,58,15,20,25,15,74,3,30,81,112,117,244,274,455,15,58,330,38,66,71,178,61,84,25,13,18,23,343,46,58,13,10,18,20,64,15,18,56,38,43,38,178,188,23,8,3,137,203,25,15,10,51,13,3,5,13,5,3,5,13,8,38,13,76,25,58,13,127,51,51,25,48,13,51,25,23,38,25,8,13,10,8,33,8,8,5,23,3,13,20,25,5,5,5,5,5,23,25,48,140,43,18,13,5,13,20,18,91,38,25,112,132,51,64,56,28,25,76,264,124,414,267,79,25,107,18,28,20,69,196,41,25,15,15,3,13,74,114,3,36,5,61,99,10,51,155,170,175,5,51,38,20,43,10,25,145,259,99,58,3,5,74,15,13,13,8,107,84,10,5,10,5,30,8,20,20,89,15,53,56,89,53,30,43,160,23,8,76,102,5,51,10,23,28,38,38,13,25,51,25,15,30,18,13,15,13,25,15,10,33,25,8,25,5,23,33,30,23,23,41,335,38,51,8,33,13,13,135,150,13,18,51,127,25,5,33,25,25,76,25,18,178,241,152,114,71,5,89,64,28,69,5,10,81,112,15,48,33,20,10,13,102,64,38,8,41,43,130,323,46,38,218,13,30,25,76,41,38,66,13,254,69,69,102,89,28,38,511,3,15,25,150,155,8,648,5,3,51,3,64,13,25,15,10,76,432,51,25,25,152,76,25,178,13,102,165,56,30,10,28,71,30,41,102,25,330,51,584,25,25,51,10,3,157,33,13,13,18,23,15,13,25,23,8,20,28,36,97,20,48,259,51,25,30,89,3,99,25,13,38,76,25,38,13,64,25,13,25,25,38,25,51,8,25,38,5,5,38,51,25,5,51,38,38,472,51,51,13,25,13,25,13,140,102,76,51,25,25,25,178,25,13,25,13,13,178,25,25,25,114,25,51,102,38,25,25,25,305,13,25,457,76,51,76,279,51,25,51,25,76,13,25,25,25,25,25,20,51,25,25,13,25,51,254,178,356,279,76,127,89,25,51,51,38,64,38,25,64,89,51,51,89,152,25,51,13,38,76,51,25,38,13,13,51,13,102,152,114,13,76,13,25,13,13,76,76,51,13,51,51,140,76,38,267,203,51,25,51,178,25,25,20,53,191,203,102,64,15,13,89,15,15,25,13,18,64,33,25,20,13,58,51,38,13,20,102,356,46,28,48,18,216,292,358,267,18,191,203,18,25,51,51,38,51,140,51,76,13,51,64,76,51,51,51,13,38,13,76,25,25,76,25,13,38,13,64,13,13,76,51,51,25,25,13,76,102,51,25,5,25,25,25,25,76,25,25,25,152,559,25,381,5,152,25,127,51,64,5,51,114,8,64,64,76,8,5,5,51,51,8,51,51,5,64,5,13,13,89,76,152,51,178,203,25,25,25,76,38,13,51,25,13,25,13,13,76,102,25,152,25,56,41,20,66,33,38,13,53,132,25,51,76,13,28,13,13,127,30,64,51,30,58,102,132,97,46,89,102,51,25,61,36,36,20,10,84,46,53,8,8,51,38,8,15,74,25,25,38,51,76,25,51,25,38,152,132,152,330,43,193,203,254,38,185,51,51,64,64,5,33,102,18,64,25,38,18,76,51,18,25,51,51,38,58,89,30,10,64,43,33,13,10,152,102,89,51,51,13,25,38,36,33,25,102,51,58,229,51,76,76,13,13,38,36,25,51,102,76,25,51,25,51,13,25,25,38,114,102,241,38,13,13,38,25,25,13,38,152,51,71,25,38,89,51,147,127,25,102,140,13,51,13,25,38,13,25,25,76,178,25,38,25,13,8,13,13,38,5,76,64,5,13,51,64,64,13,3,64,8,13,5,64,89,51,30,5,38,3,20,76,20,13,51,8,8,5,3,25,64,51,51,25,76,102,51,279,25,254,38,203,127,140,51,64,25,76,25,25,25,25,25,13,18,13,76,25,13,25,25,25,25,203,13,76,51,13,64,13,25,25,38,25,51,102,25,51,51,76,610,13,330,61,51,107,38,76,30,25,51,13,20,13,38,89,15,3,91,5,64,3,157,122,25,30,18,38,38,20,20,10,5,251,404,318,112,69,81,15,5,15,79,193,5,36,15,5,33,56,97,20,36,41,69,137,18,8,170,38,173,8,76,10,51,25,30,23,71,15,18,3,28,18,15,41,10,33,102,28,33,41,10,13,36,18,353,76,51,10,38,157,231,122,30,33,33,23,13,10,5,10,53,5,76,53,13,18,234,5,48,226,74,20,264,3,132,211,8,81,18,163,224,51,30,5,76,8,36,13,89,127,15,5,5,8,38,20,20,46,15,33,48,38,38,10,97,13,18,147,18,94,140,10,41,8,33,8,43,13,28,18,23,152,3,56,53,10,33,28,41,135,64,102,102,142,76,25,13,76,38,51,51,25,51,25,38,51,152,102,51,76,25,127,64,66,99,64,69,33,157,36,20,170,51,5,8,64,25,8,13,20,13,76,20,41,5,81,300,66,10,211,132,188,66,10,160,185,74,15,18,3,5,371,94,38,8,43,8,30,15,20,74,91,23,5,30,48,20,28,41,15,43,3,5,20,345,124,20,3,28,173,36,127,302,86,36,25,5,5,5,254,127,292,198,13,277,13,112,216,130],"type":"bar","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"error_y":{"color":"rgba(31,119,180,1)"},"error_x":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+<div id="column-1" class="section level2" data-width="350">
+<h2 data-width="350">Column</h2>
+<div id="chart-b" class="section level3">
+<h3>Chart B</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="htmlwidget-aab970554ba358e81b94" style="width:576px;height:460.8px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-aab970554ba358e81b94">{"x":{"visdat":{"83ab2ea6e818":["function () ","plotlyVisDat"]},"cur_data":"83ab2ea6e818","attrs":{"83ab2ea6e818":{"x":{},"y":{},"mode":"markers","color":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"scatter"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"snow"},"yaxis":{"domain":[0,1],"automargin":true,"title":"prcp"},"hovermode":"closest","showlegend":true},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"x":[25,76,51,152,318,38,20,18,91,140,76,38,152,25],"y":[30,56,71,170,241,8,66,10,104,145,150,76,102,229],"mode":"markers","type":"scatter","name":"April","marker":{"color":"rgba(102,194,165,1)","line":{"color":"rgba(102,194,165,1)"}},"textfont":{"color":"rgba(102,194,165,1)"},"error_y":{"color":"rgba(102,194,165,1)"},"error_x":{"color":"rgba(102,194,165,1)"},"line":{"color":"rgba(102,194,165,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[25,25,25,8,25,81,25,3,254,25,76,25,406,330,178,127,51,178,51,102,25,25,79,30,38,36,15,3,51,13,15,5,41,53,15,43,206,193,53,30,8,15,79,91,97,18,36,33,43,10,10,51,51,25,13,25,66,10,20,23,18,48,5,13,89,89,152,25,305,127,25,25,25,25,102,51,25,51,76,102,25,25,25,13,51,51,25,13,25,25,13,15,36,8,312,8,28,8,13,23,25,8,18,20,33,53,25,5,25,38,30,23,71,13,84,38,279,25,13,3,292,107,89,13,20,30,127,213,46,114,114,97,356,107,76,41,5,330,38,381,76,38,76,185,41,58,23,10,5,51,229,25,10,127,51,13,41,10,18,10,28,5,76,25,46,178,152,25,5,25,64,51,36,10,28,10,15,3,8,13,33,10,25,25,25,25,25,25,152,25,178,51,102,109,51,48,76,135,13,10,61,25,56,71,381,3,3,25,102,46,51,48,107,25,25,102,25,102,76,178,127,76,51,38,13,25,51,13,25,25,102,76,25,51,13,13,51,51,25,13,13,13,25,5,3,107,13,13,13,3,51,38,25,51,51,25,51,127,76,38,25,13,13,76,13,13,13,76,13,13,25,76,8,56,25,15,5,13,13,43,5,13,13,5,10,30,10,38,30,51,5,81,51,51,13,114,102,127,203,64,64,8,13,165,102,76,8,13,8,46,13,13,13,13,13,51,13,102,51,51,25,51,76,25,51,25,127,76,13,51,25,114,25,25,25,76,102,51,102,64,102,102,152,254,254,254,51,178,152,191,127,25,25,89,53,5,46,178,20,76,13,13,51,25,13,13,13,25,20,13,13,13,13,13,13,13,25,3,18,30,13,13,3,25,38,152,152,13,152,25,64,51,13,13,13,64,38,25,20,130,79,23,25,13,48,43,74,5,3,33,140,56,25,76,13,13,38,13,13,25,25,13,5,51,58,178,229,330,38,43,38,178,188,23,8,3,137,203,25,15,10,51,13,3,5,13,5,3,51,25,25,112,132,51,64,56,28,25,76,51,155,170,175,5,51,38,20,43,10,43,160,23,8,76,102,5,51,10,23,28,13,13,135,150,13,18,51,127,25,5,76,25,218,13,30,25,76,41,38,66,13,254,69,69,89,28,38,511,76,432,102,165,51,10,3,157,89,3,99,25,13,140,102,76,51,25,25,25,178,25,13,25,13,13,25,25,25,25,25,20,51,25,25,13,25,51,254,51,13,76,38,267,203,51,25,51,178,25,25,48,18,216,292,358,267,18,191,203,18,13,51,381,203,25,25,25,76,38,13,51,25,13,25,13,13,13,13,127,30,64,51,30,58,102,132,97,46,203,254,38,36,33,25,102,51,58,229,51,76,76,13,13,38,36,38,89,51,147,127,25,102,140,38,25,5,38,3,20,76,20,13,51,8,8,5,3,25,64,25,254,140,51,64,25,76,51,13,13,330,30,18,38,38,20,20,10,5,170,38,173,8,76,10,157,231,122,30,33,33,23,13,10,5,10,53,74,8,81,97,13,18,147,18,94,140,10,41,8,33,8,43,28,41,135,51,152,102,51,76,25,127,64,211,132,188,66,10,160,185,74,15,18,3,5,28,173,36,127,302,86,36,25,5,5,198,130],"y":[284,5,3,3,5,25,3,18,180,13,53,25,203,97,56,71,25,84,18,18,10,10,236,15,13,8,13,5,13,3,5,3,30,394,3,38,137,119,58,18,3,10,28,48,41,3,15,8,30,13,3,386,20,3,3,3,109,5,8,8,10,13,10,8,340,20,43,33,58,13,264,13,254,8,5,48,15,20,13,18,5,114,10,3,15,18,15,3,20,13,3,8,15,5,208,5,318,8,23,10,8,3,8,13,5,18,13,5,472,119,104,102,71,3,33,33,135,5,8,5,216,69,480,3,13,10,69,33,15,41,20,51,99,33,13,193,5,330,33,340,762,15,30,201,15,25,20,23,5,89,89,20,3,30,20,8,23,43,13,8,5,5,33,20,38,41,13,15,3,18,15,20,15,3,287,8,3,3,5,10,3,3,18,18,38,61,38,46,114,38,30,15,36,38,30,15,94,142,8,3,41,13,46,46,305,5,5,20,33,46,15,18,41,8,13,86,15,64,66,79,66,51,41,23,3,13,20,10,15,201,46,33,10,48,15,5,10,8,5,5,8,8,218,13,3,20,5,3,3,5,74,381,279,33,8,3,8,25,18,23,8,3,3,33,3,3,3,229,15,10,18,20,3,10,5,3,3,13,246,20,3,3,3,3,10,10,5,18,38,23,5,5,10,41,5,102,41,86,178,46,41,10,97,86,64,30,5,13,8,25,8,5,8,3,3,38,13,48,33,20,13,259,76,13,18,15,102,25,8,13,25,30,15,25,13,30,119,15,104,46,89,86,132,246,231,241,41,147,130,152,119,18,20,53,434,3,30,107,10,43,3,3,20,10,3,5,10,20,25,10,8,3,5,5,3,3,3,71,5,13,3,3,3,145,8,61,43,5,58,13,28,23,5,3,3,56,15,3,15,76,46,10,15,5,30,23,36,3,5,25,71,348,10,13,3,5,8,3,3,5,20,3,3,13,18,155,38,145,351,25,25,86,79,13,3,8,53,69,8,8,10,46,13,3,5,15,8,3,191,8,211,10,13,13,216,51,10,36,25,30,119,58,71,3,33,18,3,23,5,224,102,10,3,41,48,3,23,8,8,5,5,8,41,30,18,13,15,25,8,8,13,5,201,3,15,5,30,10,10,36,3,132,43,48,142,8,5,353,69,236,69,147,10,5,15,122,30,3,58,10,5,36,15,13,15,3,3,8,23,3,3,13,3,3,3,8,5,3,5,3,23,5,3,3,8,15,91,76,5,229,25,51,28,28,13,10,43,28,13,18,5,127,102,140,102,18,89,89,3,25,8,43,246,10,10,15,38,13,3,13,23,3,13,8,10,3,5,56,13,15,18,13,15,30,66,30,5,165,91,13,15,15,8,48,13,33,53,15,10,23,8,5,18,5,475,94,13,28,56,15,61,94,3,3,18,8,3,8,25,15,13,13,3,3,5,3,10,25,20,104,91,28,61,8,20,8,5,8,300,18,99,13,15,10,13,5,3,127,23,69,3,46,5,30,66,20,8,10,10,3,3,5,3,5,5,48,5,53,28,3,3,107,8,20,36,13,15,3,8,8,5,53,8,64,5,36,20,152,38,3,8,25,61,38,38,8,3,20,43,23,5,10,5,3,5,69,5,41,81,23,5,10,3,5,132,76],"mode":"markers","type":"scatter","name":"December","marker":{"color":"rgba(252,141,98,1)","line":{"color":"rgba(252,141,98,1)"}},"textfont":{"color":"rgba(252,141,98,1)"},"error_y":{"color":"rgba(252,141,98,1)"},"error_x":{"color":"rgba(252,141,98,1)"},"line":{"color":"rgba(252,141,98,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[51,51,13,25,76,51,25,13,25,254,51,3,23,25,104,25,25,178,23,51,51,51,25,25,51,25,51,25,25,76,76,23,8,43,38,36,48,15,10,8,13,114,109,112,28,43,18,18,13,66,13,20,71,99,25,23,28,48,467,53,53,13,25,25,51,25,25,102,25,51,406,51,51,20,13,5,18,15,13,18,38,5,8,15,127,56,20,51,25,38,15,13,76,51,25,25,152,203,152,13,51,25,30,13,25,36,25,51,51,25,25,51,25,51,25,51,25,51,152,46,66,64,5,41,160,38,259,28,892,86,23,94,64,18,13,10,46,43,33,38,18,132,112,30,305,13,33,102,25,64,25,25,76,20,25,18,79,43,13,38,15,76,279,13,13,191,13,102,10,239,112,130,241,20,30,107,305,13,173,127,71,102,64,109,97,13,33,25,38,61,41,112,81,46,145,76,30,191,20,38,94,53,191,30,81,8,165,25,3,13,43,254,86,38,178,64,25,41,56,30,33,43,165,25,51,51,76,51,51,38,76,102,13,13,38,13,51,13,267,368,102,5,46,18,13,41,41,5,61,89,71,25,13,102,20,30,10,5,99,122,246,25,13,25,25,356,15,13,51,8,25,5,25,23,25,51,38,25,13,127,25,457,356,102,79,66,41,18,8,30,10,10,41,231,43,71,51,25,25,76,38,25,127,76,51,13,13,64,102,25,457,305,127,127,38,38,5,3,64,38,20,10,8,76,25,13,20,178,46,559,64,38,114,51,13,13,51,51,51,76,38,343,51,279,41,259,127,165,216,33,51,25,330,25,76,3,25,203,25,25,584,51,762,229,102,51,25,25,25,66,76,25,76,13,13,51,254,13,51,18,51,25,64,51,25,38,25,38,51,13,13,13,102,102,102,216,25,13,51,25,64,38,64,13,25,457,25,25,28,13,25,8,28,64,28,43,13,25,160,38,38,76,229,203,76,13,13,25,13,25,25,13,51,25,64,25,13,38,38,13,8,25,38,13,38,13,76,13,13,25,152,76,76,8,15,28,13,8,51,152,46,102,13,25,25,20,51,46,13,3,10,20,30,107,30,18,15,76,457,94,61,20,25,10,76,43,18,25,13,38,8,81,20,3,114,51,76,13,25,13,51,51,51,51,102,102,152,51,25,28,25,117,25,254,51,25,51,102,25,406,559,76,25,127,51,76,51,102,38,102,102,152,25,51,51,13,25,51,30,20,20,25,38,117,8,20,25,71,305,25,76,122,33,25,13,10,10,5,20,25,51,20,8,160,33,20,13,13,13,25,25,13,38,64,25,89,13,13,38,102,102,89,25,13,13,13,76,51,13,13,25,38,25,102,8,18,25,51,203,38,152,330,43,318,3,30,81,112,117,244,274,455,15,343,46,58,13,76,25,58,13,127,51,23,3,13,20,25,5,5,5,5,5,23,25,48,140,43,18,13,5,25,15,15,3,13,74,114,3,36,5,61,99,5,10,5,30,8,20,20,89,15,53,56,89,53,30,15,10,33,25,8,25,5,23,33,30,23,23,41,335,38,51,48,33,20,10,13,102,64,38,8,41,43,130,323,46,38,150,155,8,648,5,3,51,25,152,76,25,178,13,30,41,102,25,330,51,584,25,28,36,97,20,48,259,51,25,25,51,8,25,38,5,5,38,51,25,5,51,38,38,472,51,51,38,25,25,25,305,13,25,457,76,51,38,64,38,25,64,89,51,51,89,152,25,152,114,13,76,13,25,13,13,76,76,51,13,51,25,20,13,58,51,38,13,20,102,356,46,28,140,51,76,76,25,13,38,13,64,13,13,76,51,51,25,25,25,76,25,25,25,152,559,25,5,5,51,51,8,51,51,5,64,5,13,13,89,76,152,33,38,13,53,132,25,51,76,8,8,51,38,8,15,74,25,25,38,51,76,25,330,43,193,51,18,25,51,51,38,58,89,30,10,64,43,33,13,10,152,102,89,241,38,13,13,38,25,25,13,38,152,51,25,38,13,25,25,76,178,25,51,64,64,13,3,64,8,13,5,64,89,51,51,51,25,76,102,51,279,38,203,127,18,13,76,25,13,25,25,25,25,203,13,25,51,102,25,51,51,76,610,38,89,15,3,91,5,64,3,157,122,25,5,36,15,5,33,56,97,20,36,41,69,137,18,15,41,10,33,102,28,33,41,10,13,36,18,353,76,51,10,18,234,5,48,226,20,264,3,132,211,5,5,8,38,20,20,46,15,33,48,38,38,10,23,152,3,56,53,10,25,13,76,38,51,51,25,51,8,64,25,8,13,20,13,76,20,41,5,81,300,66,10,74,91,23,5,30,48,20,28,41,15,43,3,5,20,345,124,20,3,5,254,127,292,13,277,13,112,216],"y":[5,53,8,15,46,36,20,10,20,348,51,3,23,13,51,13,579,147,66,18,15,51,41,5,20,13,43,41,18,53,51,3,3,41,41,3,8,10,8,13,3,109,56,56,5,15,8,5,3,33,3,3,30,81,23,51,43,51,442,56,48,13,3,18,33,13,8,53,36,43,142,89,13,5,18,3,18,13,3,5,33,5,10,10,74,46,51,28,5,10,8,5,43,25,56,8,46,41,51,13,51,5,89,25,25,36,28,18,13,10,8,13,10,38,20,23,41,102,89,36,53,51,5,33,155,38,295,30,836,91,18,36,8,10,3,3,13,38,13,23,10,163,124,43,310,41,28,41,18,46,15,20,48,15,13,13,74,53,10,135,64,81,335,18,46,338,48,378,5,239,102,490,175,5,23,61,544,71,427,97,5,15,5,18,15,3,15,20,30,8,5,36,20,8,147,76,33,155,20,38,94,53,191,36,249,61,554,25,3,8,41,272,86,43,673,61,15,20,48,13,28,18,175,13,10,15,20,13,20,10,30,104,15,5,15,5,46,10,234,589,140,38,15,13,8,38,43,3,20,76,43,13,5,122,20,64,10,5,124,104,216,13,8,28,23,363,3,5,20,8,20,13,15,3,3,51,5,8,5,13,5,310,787,48,51,56,33,13,8,20,8,23,28,122,28,66,43,23,5,18,8,20,145,69,84,30,36,41,109,38,406,216,89,89,28,20,3,3,58,30,8,5,8,64,23,13,13,221,51,500,43,38,18,5,3,3,10,36,84,107,30,345,36,216,30,231,97,290,419,30,51,43,310,25,76,3,13,84,13,15,546,94,610,254,175,20,20,53,46,36,28,15,51,13,18,23,254,18,41,69,20,13,58,33,5,20,13,20,38,18,13,8,76,64,64,196,5,3,13,10,25,8,64,3,8,140,5,8,10,8,18,20,5,10,3,43,15,13,51,20,48,43,399,175,51,3,5,5,5,13,18,8,10,5,64,41,15,91,23,13,3,20,30,18,15,5,69,18,18,30,165,81,94,3,10,10,3,3,25,109,56,323,8,20,25,15,46,36,5,3,8,13,15,76,15,13,20,66,262,51,89,10,15,5,56,33,5,76,5,30,5,33,8,23,23,30,56,5,18,3,25,43,28,13,91,97,152,51,10,20,13,94,5,241,48,8,15,56,28,251,480,53,20,122,48,56,28,74,38,79,81,145,20,23,5,5,25,33,5,10,10,13,20,109,3,13,30,43,178,18,64,51,5,20,3,3,3,3,5,8,79,28,18,178,25,13,5,5,5,5,3,3,20,25,8,25,3,5,33,71,107,66,20,3,3,3,61,41,5,5,5,15,8,89,3,8,25,23,175,20,127,94,157,193,3,25,76,84,157,338,300,569,36,389,38,58,30,38,13,41,25,43,28,5,3,5,8,3,3,3,3,8,10,15,10,23,132,66,157,10,28,13,8,5,3,5,38,102,3,25,5,28,61,5,5,5,36,3,10,13,66,18,69,46,81,102,30,13,8,33,18,5,5,3,15,13,15,8,71,30,361,18,38,5,13,5,5,5,64,71,23,3,97,46,112,218,53,20,69,333,33,371,5,3,48,30,142,76,61,333,8,41,41,102,28,378,53,566,33,28,33,58,10,89,363,104,53,10,10,3,15,13,5,5,13,15,8,3,23,36,36,297,28,33,28,8,8,5,135,8,25,493,124,5,5,25,25,10,56,38,58,76,61,386,13,28,18,13,15,3,3,5,20,51,10,56,15,155,8,15,3,36,38,51,23,48,251,485,208,112,335,389,140,28,13,8,15,5,38,8,13,51,89,117,38,23,13,69,18,56,38,287,714,56,3,5,36,36,8,20,36,5,61,10,81,15,69,56,137,15,8,3,30,58,5,10,43,3,3,10,23,3,18,25,13,13,20,30,119,51,79,91,99,18,15,8,38,51,10,23,36,10,5,61,36,10,13,8,140,56,56,94,20,8,10,28,13,18,33,30,216,36,20,28,36,13,28,56,152,25,23,58,66,5,3,25,3,10,5,107,76,56,33,66,5,91,460,48,787,33,310,173,13,13,43,18,13,25,13,38,25,81,36,25,43,79,23,36,43,460,645,152,64,10,3,66,8,94,3,84,104,74,3,18,5,3,13,30,84,20,41,18,41,109,18,15,13,3,38,51,8,10,10,3,3,23,10,132,18,28,5,8,155,5,64,74,20,264,3,132,180,5,5,8,41,5,8,43,10,69,41,66,91,13,13,201,287,97,107,13,5,3,28,5,5,18,5,38,3,23,13,5,3,8,5,71,10,30,13,66,284,66,10,5,25,5,3,18,3,3,10,13,8,25,48,53,23,132,86,51,3,15,338,109,297,8,315,20,102,216],"mode":"markers","type":"scatter","name":"February","marker":{"color":"rgba(141,160,203,1)","line":{"color":"rgba(141,160,203,1)"}},"textfont":{"color":"rgba(141,160,203,1)"},"error_y":{"color":"rgba(141,160,203,1)"},"error_x":{"color":"rgba(141,160,203,1)"},"line":{"color":"rgba(141,160,203,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[64,25,38,76,25,25,38,38,152,102,51,25,25,51,51,25,38,23,20,81,5,25,76,25,25,51,25,23,89,257,218,130,53,28,53,48,28,28,10,8,18,81,48,25,51,25,13,25,20,13,33,28,38,41,36,18,28,15,10,41,8,102,51,152,114,127,13,25,25,25,76,76,76,25,25,13,51,25,51,25,25,25,25,25,25,51,51,25,18,20,23,13,33,15,23,58,33,61,46,41,25,8,33,3,5,8,43,13,13,71,203,89,127,51,13,13,25,20,114,13,51,25,25,13,20,8,18,51,76,25,193,267,58,97,30,8,20,13,61,30,76,51,13,58,33,8,13,25,56,36,8,8,38,51,25,51,51,305,152,51,51,51,76,76,51,25,13,152,13,38,84,231,46,302,180,104,5,53,140,13,18,46,13,46,89,15,25,76,25,25,13,13,229,38,13,20,25,10,13,25,25,5,43,15,10,41,15,25,15,10,25,38,28,18,13,25,18,64,25,25,25,76,102,51,38,64,25,64,15,5,13,38,10,5,25,20,38,76,51,152,25,51,51,15,30,48,25,25,51,76,279,25,51,25,127,51,28,69,102,20,51,3,13,25,25,25,38,25,38,25,25,51,76,38,13,25,25,102,152,25,25,51,13,38,13,13,13,5,25,64,236,551,279,152,127,51,140,51,8,13,25,20,20,13,107,5,25,28,33,53,25,76,5,76,25,102,89,76,38,13,51,38,38,191,51,25,25,51,13,38,51,64,25,13,25,25,13,64,13,25,8,23,15,13,25,13,51,13,13,5,8,64,64,114,51,30,28,33,3,25,130,48,18,28,23,15,8,152,229,330,36,25,3,76,64,13,8,13,15,58,58,13,25,51,152,51,51,25,51,51,13,25,25,51,25,25,51,51,89,10,25,102,102,25,51,25,76,51,102,102,76,38,13,102,76,51,25,25,38,25,25,76,102,56,152,13,132,81,64,5,13,79,51,30,15,30,38,13,46,30,69,38,15,30,8,10,41,13,5,10,46,28,38,51,13,152,76,38,25,38,38,13,25,51,13,64,102,66,71,30,124,41,46,5,46,64,64,25,25,102,38,13,51,76,38,13,25,38,25,13,8,15,25,58,15,20,25,15,74,38,66,71,178,61,84,25,13,18,23,5,13,8,38,48,13,51,25,23,38,25,8,13,10,8,33,8,8,5,264,124,414,267,79,25,107,18,28,20,69,196,41,25,145,259,99,58,3,5,74,15,13,13,8,107,84,10,38,38,13,25,51,25,15,30,18,13,15,13,25,33,25,25,18,178,241,152,114,71,5,89,64,28,69,5,10,81,112,15,3,15,25,3,64,13,51,25,25,56,30,10,28,71,33,13,13,18,23,15,13,25,23,8,20,25,13,38,76,25,38,13,64,25,13,25,25,38,178,25,25,25,114,25,51,102,178,356,279,76,127,89,25,51,38,76,51,25,38,13,13,51,13,102,20,53,191,203,102,64,15,13,89,15,15,25,13,18,64,33,25,51,51,38,51,51,64,76,51,51,51,13,38,13,76,25,25,25,5,25,25,5,152,25,127,51,64,5,51,114,8,64,64,76,8,76,102,25,152,25,56,41,20,66,89,102,51,25,61,36,36,20,10,84,46,53,38,185,51,51,64,64,5,33,102,18,64,25,38,18,76,25,51,102,76,25,51,25,51,13,25,25,38,114,102,13,51,13,13,8,13,13,38,5,76,64,5,13,76,25,25,25,25,25,13,64,13,25,25,38,61,51,107,38,76,30,25,51,13,20,13,251,404,318,112,69,81,15,5,15,79,193,51,25,30,23,71,15,18,3,28,18,5,76,53,13,18,163,224,51,30,5,76,8,36,13,89,127,15,13,28,18,64,102,102,142,76,66,99,64,69,33,157,36,20,170,51,5,371,94,38,8,43,8,30,15,20],"y":[10,3,5,5,3,3,10,5,89,56,25,13,13,20,13,15,38,8,10,203,8,13,66,15,18,20,20,33,15,41,51,46,41,15,18,18,10,10,3,8,18,51,33,10,33,20,13,5,8,3,13,8,28,33,8,8,10,8,5,20,3,25,10,23,51,69,10,51,5,5,28,25,25,10,8,13,20,13,28,5,5,5,5,5,10,38,20,5,15,13,20,13,132,15,15,25,15,18,23,5,5,3,13,3,5,18,23,18,8,51,226,15,36,18,15,36,13,8,56,8,10,8,28,10,15,10,8,307,41,8,18,69,10,23,8,3,10,13,25,15,76,51,13,58,33,8,109,25,56,89,5,5,48,33,15,15,20,66,48,20,8,13,76,13,56,20,10,71,8,33,79,86,43,48,30,81,20,69,25,3,15,43,28,43,43,18,43,79,18,30,10,10,89,3,8,15,5,5,5,41,23,3,25,3,8,38,10,13,15,10,15,5,13,25,25,8,10,58,41,28,30,91,216,46,46,25,18,53,5,3,13,23,10,5,236,10,33,38,25,46,25,36,5,20,25,28,13,43,36,30,91,8,18,10,277,41,20,18,23,13,53,3,10,33,13,23,28,15,25,13,8,23,64,18,13,18,8,86,66,15,10,305,5,18,5,5,13,5,5,28,64,76,36,33,28,18,25,28,3,10,13,8,3,3,43,5,5,3,8,18,13,13,5,30,13,13,15,13,13,3,13,10,3,69,13,25,51,51,5,8,30,36,10,5,15,13,5,25,5,13,3,8,3,3,13,5,33,5,5,3,3,20,56,46,28,15,8,13,3,13,36,25,5,15,18,13,23,53,56,53,10,25,3,53,18,10,5,8,23,28,25,13,18,25,97,28,38,5,18,18,5,10,13,33,38,15,25,38,64,13,13,122,74,13,30,117,25,46,91,99,76,30,8,94,66,46,28,81,30,20,20,74,94,61,58,10,23,15,36,38,15,15,25,5,13,23,20,3,13,10,25,15,3,10,3,5,13,3,5,8,20,10,8,25,15,38,56,5,13,5,3,3,20,41,8,13,25,46,53,13,66,23,69,10,25,51,18,8,5,15,13,3,23,13,15,3,13,20,5,3,3,13,5,38,5,15,163,13,13,23,41,33,61,203,30,53,18,15,8,25,38,5,5,30,13,30,15,8,8,15,5,13,23,5,25,25,5,8,89,23,145,38,36,13,38,3,10,13,46,41,10,10,43,58,15,36,3,5,48,3,8,5,3,36,30,3,30,28,5,20,10,3,10,23,13,107,15,18,38,378,122,8,15,94,135,23,56,33,3,36,8,3,53,3,10,58,20,5,3,10,15,5,15,5,25,8,18,61,20,10,180,18,30,8,10,10,15,8,8,48,20,8,13,15,8,18,18,3,8,8,13,13,61,13,10,20,25,3,15,18,328,13,13,25,56,127,53,25,48,71,13,30,8,10,13,13,10,15,15,41,5,23,15,71,76,38,13,10,15,10,20,15,8,33,25,10,46,23,25,25,51,13,147,25,58,51,25,30,25,5,20,13,43,13,25,18,15,5,8,33,71,25,20,13,48,5,43,23,8,53,36,23,5,51,48,10,58,3,43,30,203,43,102,46,25,25,46,20,8,3,13,241,25,18,20,56,18,18,8,33,8,33,18,10,43,56,18,5,36,28,20,38,23,5,20,8,30,10,20,140,38,38,23,13,38,13,3,5,5,13,18,5,53,79,5,25,53,18,5,25,8,18,13,56,5,18,10,15,28,20,36,8,33,36,8,20,18,5,5,69,137,56,41,30,23,10,5,10,46,51,18,3,8,3,25,5,8,137,25,5,13,69,25,5,5,30,41,10,18,5,36,3,20,3,53,84,15,5,13,41,43,43,20,36,13,13,20,10,30,33,71,3,5,99,25,5,15,8,5,3,3,5,3,13,10],"mode":"markers","type":"scatter","name":"January","marker":{"color":"rgba(231,138,195,1)","line":{"color":"rgba(231,138,195,1)"}},"textfont":{"color":"rgba(231,138,195,1)"},"error_y":{"color":"rgba(231,138,195,1)"},"error_x":{"color":"rgba(231,138,195,1)"},"line":{"color":"rgba(231,138,195,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[25,25,5,18,43,8,51,41,18,5,10,3,10,20,152,41,102,3,8,20,25,25,13,15,5,25,38,25,13,51,152,51,25,25,25,51,38,5,3,13,51,3,76,25,5,25,25,76,76,13,18,38,25,13,5,13,13,13,23,15,25,5,20,25,58,13,10,18,13,20,10,8,33,15,10,25,13,25,13,51,76,279,51,25,51,51,25,13,51,13,51,25,51,51,13,25,30,8,38],"y":[15,15,28,15,23,3,145,36,13,8,3,3,18,13,325,46,122,5,5,18,18,356,13,10,5,117,36,13,8,20,965,114,10,10,20,8,8,3,5,5,30,3,135,196,13,20,15,132,241,25,13,15,10,13,10,10,41,13,20,76,23,5,20,13,33,25,8,53,102,127,10,3,28,5,28,20,5,13,5,36,109,1036,119,386,531,76,38,15,36,10,102,64,30,160,36,76,28,8,25],"mode":"markers","type":"scatter","name":"March","marker":{"color":"rgba(166,216,84,1)","line":{"color":"rgba(166,216,84,1)"}},"textfont":{"color":"rgba(166,216,84,1)"},"error_y":{"color":"rgba(166,216,84,1)"},"error_x":{"color":"rgba(166,216,84,1)"},"line":{"color":"rgba(166,216,84,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[20,15,51,64,13,64,25,132],"y":[163,81,76,53,13,117,112,168],"mode":"markers","type":"scatter","name":"May","marker":{"color":"rgba(255,217,47,1)","line":{"color":"rgba(255,217,47,1)"}},"textfont":{"color":"rgba(255,217,47,1)"},"error_y":{"color":"rgba(255,217,47,1)"},"error_x":{"color":"rgba(255,217,47,1)"},"line":{"color":"rgba(255,217,47,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[38,25,76,178,71,5,175,38,51,51,38,38,13,51,13,30,13,8,25,51,38,102,76,25,13,91,18,56,38,102,30,76,13,102,178,28,152,71,25,33,38],"y":[15,5,20,71,48,3,132,64,114,13,15,20,3,23,20,20,15,8,69,28,38,46,33,15,5,132,53,84,89,46,127,56,13,41,117,94,81,66,3,152,28],"mode":"markers","type":"scatter","name":"November","marker":{"color":"rgba(229,196,148,1)","line":{"color":"rgba(229,196,148,1)"}},"textfont":{"color":"rgba(229,196,148,1)"},"error_y":{"color":"rgba(229,196,148,1)"},"error_x":{"color":"rgba(229,196,148,1)"},"line":{"color":"rgba(229,196,148,1)"},"xaxis":"x","yaxis":"y","frame":null},{"x":[41,13,38,15],"y":[25,10,188,114],"mode":"markers","type":"scatter","name":"October","marker":{"color":"rgba(179,179,179,1)","line":{"color":"rgba(179,179,179,1)"}},"textfont":{"color":"rgba(179,179,179,1)"},"error_y":{"color":"rgba(179,179,179,1)"},"error_x":{"color":"rgba(179,179,179,1)"},"line":{"color":"rgba(179,179,179,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+<hr />
+</div>
+<div id="chart-c" class="section level3">
+<h3>Chart C</h3>
+<div class="knitr-options" data-fig-width="576" data-fig-height="460">
+
+</div>
+<div id="htmlwidget-abb72b80d9042449445d" style="width:576px;height:460.8px;" class="plotly html-widget"></div>
+<script type="application/json" data-for="htmlwidget-abb72b80d9042449445d">{"x":{"visdat":{"83ab45e8e022":["function () ","plotlyVisDat"]},"cur_data":"83ab45e8e022","attrs":{"83ab45e8e022":{"x":{},"y":{},"alpha_stroke":1,"sizes":[10,100],"spans":[1,20],"type":"box"}},"layout":{"margin":{"b":40,"l":60,"t":25,"r":10},"xaxis":{"domain":[0,1],"automargin":true,"title":"month","type":"category","categoryorder":"array","categoryarray":["01","02","03","04","05","10","11","12"]},"yaxis":{"domain":[0,1],"automargin":true,"title":"snow"},"hovermode":"closest","showlegend":false},"source":"A","config":{"modeBarButtonsToAdd":["hoverclosest","hovercompare"],"showSendToCloud":false},"data":[{"fillcolor":"rgba(31,119,180,0.5)","x":["01","01","01","01","01","01","01","01","02","03","03","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","01","01","01","01","01","01","02","02","02","02","02","02","02","02","03","03","12","12","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","12","12","02","02","02","02","02","02","02","02","02","02","02","02","02","03","11","11","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","11","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","01","01","01","02","02","02","02","02","02","02","02","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","05","11","11","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","12","01","01","02","02","02","02","02","02","02","02","12","12","01","01","01","01","01","01","02","02","02","02","02","02","02","02","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","05","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","01","01","01","02","02","02","02","02","02","02","12","12","01","01","01","02","02","02","02","02","02","02","02","03","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","03","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","02","02","02","02","02","03","12","12","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","11","12","12","12","12","12","12","12","12","12","01","02","03","12","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","03","12","12","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","03","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","11","12","12","12","02","02","03","03","12","12","01","01","01","02","02","02","02","02","12","12","12","01","02","02","02","02","03","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","12","12","12","12","12","12","12","12","12","01","01","01","01","02","02","02","02","12","12","12","12","12","12","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","03","03","12","12","02","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","04","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","02","12","12","12","12","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","03","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","12","12","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","03","03","03","04","10","11","11","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","03","03","03","03","04","04","05","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","02","02","02","02","02","02","03","12","12","12","12","12","12","12","12","01","01","01","01","01","02","02","02","02","02","02","02","03","03","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","11","11","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","04","04","05","05","10","10","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","03","03","03","11","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","02","02","02","12","12","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","03","12","01","01","01","01","01","01","01","01","01","01","02","02","02","03","03","03","04","05","10","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","02","02","02","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","04","04","11","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","12","12","12","12","12","12","12","12","12","12","01","01","01","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","12","11","12","12","12","12","01","01","01","02","02","02","02","02","02","02","01","01","01","02","03","03","12","12","01","01","01","02","02","02","02","02","12","12","01","01","01","01","01","02","02","02","02","02","02","02","02","03","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","11","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","03","03","03","03","03","03","05","11","11","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","03","04","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","02","02","02","12","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","03","04","11","12","01","01","01","01","02","02","02","02","02","02","02","02","02","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","03","11","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","04","04","05","11","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","03","03","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","11","11","12","12","12","12","12","12","12","12","01","01","01","02","02","02","02","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","12","12","12","12","12","12","12","12","02","02","02","02","02","02","02","12","12","02","02","02","12","12","12","12","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","12","12","12","01","01","01","01","01","02","02","02","02","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","03","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","02","02","02","02","02","12","02","02","02","02","02","12","12","01","01","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","02","02","02","02","02","02","11","12","12","12","01","01","01","01","01","02","02","02","02","02","02","02","02","04","11","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","12","12","01","01","01","01","01","01","01","01","01","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","02","12","12","12","12","12","12","12","12","12","12","02","02","02","02","12","02","02","02","02","02","12"],"y":[64,25,38,76,25,25,38,38,51,25,25,25,25,25,8,25,81,25,152,102,51,25,25,51,51,25,51,13,25,76,51,25,13,25,254,51,38,23,20,81,5,25,3,23,25,104,25,25,178,23,5,18,3,254,76,25,25,51,25,51,51,51,25,25,51,25,51,25,25,76,76,25,76,25,406,330,178,127,51,178,51,102,25,25,23,8,43,38,36,48,15,10,8,13,114,109,112,43,38,25,79,30,38,36,15,3,51,13,15,5,41,23,89,257,218,130,53,28,53,48,28,28,10,8,18,81,48,28,43,18,18,13,66,13,20,71,99,25,23,28,48,467,53,53,8,53,15,43,206,193,53,30,8,15,79,91,97,18,36,33,43,10,10,25,51,25,13,25,13,25,25,51,25,25,102,25,51,406,51,51,51,51,25,13,25,20,13,33,28,38,41,36,18,28,15,10,41,8,20,13,5,18,15,13,18,38,5,8,15,127,56,20,76,66,10,20,23,18,48,5,13,102,51,152,114,127,13,25,25,25,76,76,76,51,25,38,15,13,76,51,25,25,152,203,152,51,89,89,152,25,305,127,25,25,13,13,51,25,30,13,25,36,25,25,25,25,25,102,51,25,51,25,25,25,25,25,25,51,51,25,51,51,25,25,51,25,51,25,51,25,51,152,178,51,25,51,76,102,25,25,25,13,51,51,25,13,25,25,13,18,20,23,13,33,15,23,46,66,64,5,41,160,38,259,28,892,86,23,41,18,15,36,8,312,8,58,33,61,46,41,25,8,33,3,5,8,43,13,13,71,94,64,18,13,10,46,43,33,38,18,132,112,30,305,13,33,5,20,71,5,28,8,13,23,25,8,18,20,33,53,25,5,203,89,127,51,13,13,25,20,114,13,102,25,64,25,25,76,20,25,18,79,43,13,38,15,76,279,13,13,25,38,30,23,71,13,84,38,279,25,13,3,51,25,191,13,102,10,239,112,130,241,292,107,25,13,20,8,18,51,20,30,107,305,13,173,127,71,76,25,193,267,58,97,30,8,20,13,61,30,102,64,109,97,13,33,25,38,61,41,112,81,46,145,76,30,191,10,15,89,13,20,30,127,213,46,114,114,97,356,107,76,76,51,13,58,33,8,13,25,56,20,38,94,53,191,30,81,8,165,25,3,3,10,41,5,330,36,8,8,13,43,254,86,38,178,64,38,381,38,51,25,25,41,56,30,33,43,165,25,20,51,51,305,152,51,51,51,76,76,51,51,51,76,51,51,38,76,102,152,25,13,152,13,38,13,13,38,13,51,13,267,368,102,5,76,38,76,84,231,46,302,180,104,5,53,140,13,18,46,13,46,89,15,46,18,13,41,41,5,61,89,71,25,13,102,20,30,10,5,99,122,246,41,175,185,41,58,23,10,5,51,229,25,10,127,51,13,41,10,18,10,28,5,25,76,25,25,25,13,25,25,356,102,76,25,13,13,229,38,13,20,25,10,13,25,25,15,13,51,8,25,5,25,23,25,51,38,25,13,127,25,457,356,102,38,46,178,152,25,5,25,64,51,36,5,79,3,10,43,15,10,41,15,25,15,10,66,41,18,8,30,10,10,41,231,43,71,8,20,28,10,15,3,8,13,33,10,25,38,28,18,13,25,18,51,25,25,76,38,25,127,76,51,25,25,25,64,25,25,25,76,102,51,13,13,64,102,25,457,305,127,127,25,51,25,25,25,25,152,25,38,64,25,64,15,5,13,38,10,5,25,20,38,38,38,5,3,64,38,20,10,8,76,25,13,20,178,46,559,64,38,13,15,5,25,76,51,152,25,51,51,114,51,13,13,51,51,51,76,38,343,51,178,51,102,51,279,38,25,109,51,15,30,48,41,259,127,165,216,48,76,135,25,33,51,25,330,13,25,51,76,279,25,51,25,127,51,25,76,3,25,203,25,25,584,51,762,229,102,51,152,51,13,10,61,25,56,71,381,3,3,28,69,102,20,51,25,25,25,25,102,46,51,48,107,51,3,13,25,25,25,66,76,25,76,13,13,51,254,13,51,25,25,25,25,18,38,25,38,25,25,51,76,38,13,25,25,102,51,25,64,51,25,38,25,38,51,13,13,13,102,102,102,25,25,38,38,102,25,102,76,178,127,76,51,38,13,25,51,13,25,152,216,25,102,76,25,25,25,51,13,38,13,13,13,5,25,25,13,51,25,64,38,64,13,25,457,25,51,38,51,13,13,51,51,25,13,13,13,64,236,551,279,152,127,51,140,51,8,13,25,20,20,13,107,5,5,25,28,33,53,25,76,5,25,28,13,25,8,28,64,28,43,13,25,160,38,38,3,13,25,5,3,107,13,13,13,3,76,229,203,76,51,38,76,25,102,89,76,38,13,51,38,38,191,51,13,13,25,13,25,25,13,51,25,64,25,13,38,38,13,51,25,51,51,25,51,127,76,38,25,13,13,76,13,13,13,25,25,51,13,38,51,64,25,13,25,25,13,64,13,13,8,25,38,13,38,13,76,13,13,25,152,76,76,51,76,13,13,25,76,25,8,23,15,13,25,13,51,13,13,5,8,64,8,15,28,13,8,51,152,46,102,13,25,3,76,25,76,41,13,30,8,56,25,15,5,13,13,43,5,13,13,5,64,114,51,30,28,33,3,25,130,48,18,28,23,15,25,20,51,46,13,3,10,20,30,107,30,18,15,76,457,94,61,5,25,10,30,10,38,30,51,5,81,51,8,152,229,330,36,25,3,76,64,13,8,13,15,58,58,13,20,25,10,76,43,18,25,13,38,8,81,20,3,114,51,76,13,8,51,13,114,102,127,203,64,64,8,13,165,102,76,8,13,8,46,13,13,13,13,13,25,51,152,51,51,25,51,51,13,25,25,51,25,25,51,13,25,13,51,51,51,51,102,102,152,51,25,76,76,13,51,152,51,25,51,51,13,102,51,51,25,51,76,25,51,25,127,76,13,51,89,10,25,102,25,28,25,117,25,254,18,51,25,114,25,25,25,76,102,102,25,51,25,76,51,25,51,102,25,406,559,38,25,51,102,51,102,102,76,38,13,102,76,51,25,25,38,25,25,76,102,76,25,127,51,76,51,102,38,102,102,152,38,64,102,102,152,254,254,254,51,178,152,191,127,25,25,89,56,152,13,132,81,64,5,13,79,51,30,15,30,38,13,25,51,51,13,25,51,30,20,20,25,38,117,8,20,25,71,305,25,76,13,5,13,53,5,46,178,20,76,13,13,51,25,13,13,13,25,20,13,13,13,46,30,69,38,15,30,8,10,41,13,5,10,46,28,38,122,33,25,13,10,10,5,20,25,51,20,8,160,33,20,102,76,13,13,13,13,25,3,18,30,13,13,3,51,13,152,76,38,25,38,38,13,25,51,13,64,102,13,13,13,25,25,13,38,64,25,89,13,13,38,102,102,89,13,318,38,64,13,13,38,25,13,25,38,152,152,13,152,25,64,51,13,13,13,64,38,25,66,71,30,124,41,46,5,46,13,23,15,91,20,130,79,23,25,13,48,43,74,5,3,33,140,64,64,25,25,102,38,13,51,76,38,13,25,38,25,13,25,13,13,13,76,51,13,13,25,38,25,102,8,18,25,51,203,38,152,25,5,20,25,56,25,76,13,13,38,13,13,25,25,13,5,51,58,330,43,318,178,229,8,15,25,58,15,20,25,15,74,3,30,81,112,117,244,274,455,15,58,330,38,66,71,178,61,84,25,13,18,23,343,46,58,13,10,18,20,64,15,18,56,38,43,38,178,188,23,8,3,137,203,25,15,10,51,13,3,5,13,5,3,5,13,8,38,13,76,25,58,13,127,51,51,25,48,13,51,25,23,38,25,8,13,10,8,33,8,8,5,23,3,13,20,25,5,5,5,5,5,23,25,48,140,43,18,13,5,13,20,18,91,38,25,112,132,51,64,56,28,25,76,264,124,414,267,79,25,107,18,28,20,69,196,41,25,15,15,3,13,74,114,3,36,5,61,99,10,51,155,170,175,5,51,38,20,43,10,25,145,259,99,58,3,5,74,15,13,13,8,107,84,10,5,10,5,30,8,20,20,89,15,53,56,89,53,30,43,160,23,8,76,102,5,51,10,23,28,38,38,13,25,51,25,15,30,18,13,15,13,25,15,10,33,25,8,25,5,23,33,30,23,23,41,335,38,51,8,33,13,13,135,150,13,18,51,127,25,5,33,25,25,76,25,18,178,241,152,114,71,5,89,64,28,69,5,10,81,112,15,48,33,20,10,13,102,64,38,8,41,43,130,323,46,38,218,13,30,25,76,41,38,66,13,254,69,69,102,89,28,38,511,3,15,25,150,155,8,648,5,3,51,3,64,13,25,15,10,76,432,51,25,25,152,76,25,178,13,102,165,56,30,10,28,71,30,41,102,25,330,51,584,25,25,51,10,3,157,33,13,13,18,23,15,13,25,23,8,20,28,36,97,20,48,259,51,25,30,89,3,99,25,13,38,76,25,38,13,64,25,13,25,25,38,25,51,8,25,38,5,5,38,51,25,5,51,38,38,472,51,51,13,25,13,25,13,140,102,76,51,25,25,25,178,25,13,25,13,13,178,25,25,25,114,25,51,102,38,25,25,25,305,13,25,457,76,51,76,279,51,25,51,25,76,13,25,25,25,25,25,20,51,25,25,13,25,51,254,178,356,279,76,127,89,25,51,51,38,64,38,25,64,89,51,51,89,152,25,51,13,38,76,51,25,38,13,13,51,13,102,152,114,13,76,13,25,13,13,76,76,51,13,51,51,140,76,38,267,203,51,25,51,178,25,25,20,53,191,203,102,64,15,13,89,15,15,25,13,18,64,33,25,20,13,58,51,38,13,20,102,356,46,28,48,18,216,292,358,267,18,191,203,18,25,51,51,38,51,140,51,76,13,51,64,76,51,51,51,13,38,13,76,25,25,76,25,13,38,13,64,13,13,76,51,51,25,25,13,76,102,51,25,5,25,25,25,25,76,25,25,25,152,559,25,381,5,152,25,127,51,64,5,51,114,8,64,64,76,8,5,5,51,51,8,51,51,5,64,5,13,13,89,76,152,51,178,203,25,25,25,76,38,13,51,25,13,25,13,13,76,102,25,152,25,56,41,20,66,33,38,13,53,132,25,51,76,13,28,13,13,127,30,64,51,30,58,102,132,97,46,89,102,51,25,61,36,36,20,10,84,46,53,8,8,51,38,8,15,74,25,25,38,51,76,25,51,25,38,152,132,152,330,43,193,203,254,38,185,51,51,64,64,5,33,102,18,64,25,38,18,76,51,18,25,51,51,38,58,89,30,10,64,43,33,13,10,152,102,89,51,51,13,25,38,36,33,25,102,51,58,229,51,76,76,13,13,38,36,25,51,102,76,25,51,25,51,13,25,25,38,114,102,241,38,13,13,38,25,25,13,38,152,51,71,25,38,89,51,147,127,25,102,140,13,51,13,25,38,13,25,25,76,178,25,38,25,13,8,13,13,38,5,76,64,5,13,51,64,64,13,3,64,8,13,5,64,89,51,30,5,38,3,20,76,20,13,51,8,8,5,3,25,64,51,51,25,76,102,51,279,25,254,38,203,127,140,51,64,25,76,25,25,25,25,25,13,18,13,76,25,13,25,25,25,25,203,13,76,51,13,64,13,25,25,38,25,51,102,25,51,51,76,610,13,330,61,51,107,38,76,30,25,51,13,20,13,38,89,15,3,91,5,64,3,157,122,25,30,18,38,38,20,20,10,5,251,404,318,112,69,81,15,5,15,79,193,5,36,15,5,33,56,97,20,36,41,69,137,18,8,170,38,173,8,76,10,51,25,30,23,71,15,18,3,28,18,15,41,10,33,102,28,33,41,10,13,36,18,353,76,51,10,38,157,231,122,30,33,33,23,13,10,5,10,53,5,76,53,13,18,234,5,48,226,74,20,264,3,132,211,8,81,18,163,224,51,30,5,76,8,36,13,89,127,15,5,5,8,38,20,20,46,15,33,48,38,38,10,97,13,18,147,18,94,140,10,41,8,33,8,43,13,28,18,23,152,3,56,53,10,33,28,41,135,64,102,102,142,76,25,13,76,38,51,51,25,51,25,38,51,152,102,51,76,25,127,64,66,99,64,69,33,157,36,20,170,51,5,8,64,25,8,13,20,13,76,20,41,5,81,300,66,10,211,132,188,66,10,160,185,74,15,18,3,5,371,94,38,8,43,8,30,15,20,74,91,23,5,30,48,20,28,41,15,43,3,5,20,345,124,20,3,28,173,36,127,302,86,36,25,5,5,5,254,127,292,198,13,277,13,112,216,130],"type":"box","marker":{"color":"rgba(31,119,180,1)","line":{"color":"rgba(31,119,180,1)"}},"line":{"color":"rgba(31,119,180,1)"},"xaxis":"x","yaxis":"y","frame":null}],"highlight":{"on":"plotly_click","persistent":false,"dynamic":false,"selectize":false,"opacityDim":0.2,"selected":{"opacity":1},"debounce":0},"shinyEvents":["plotly_hover","plotly_click","plotly_selected","plotly_relayout","plotly_brushed","plotly_brushing","plotly_clickannotation","plotly_doubleclick","plotly_deselect","plotly_afterplot","plotly_sunburstclick"],"base_url":"https://plot.ly"},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+
+</div>
+
+<script>
+
+$(document).ready(function () {
+
+  // add bootstrap table styles to pandoc tables
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+
+  // initialize mathjax
+  var script = document.createElement("script");
+  script.type = "text/javascript";
+  script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+  document.getElementsByTagName("head")[0].appendChild(script);
+
+});
+</script>
+
+<div id="flexdashboard-source-code">
+<pre class="line-numbers"><code class="language-r">---
+title: "Dashboard"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source: embed
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(tidyverse)
+library(plotly)
+library(p8105.datasets)
+```
+
+```{r data}
+data("ny_noaa")
+ny_noaa = ny_noaa %>%
+  drop_na() %>%
+  separate(date, into = c("year", "month", "day")) %>%
+  filter(!(prcp == 0)) %>%
+  filter(!(snow == 0)) %>%
+  filter(!(snwd == 0)) %>%
+  filter(year == 2010)
+
+noaa_month = ny_noaa %>%
+  mutate(month = replace(month, month == "01", "January")) %>%
+  mutate(month = replace(month, month == "02", "February")) %>%
+  mutate(month = replace(month, month == "03", "March")) %>%
+  mutate(month = replace(month, month == "04", "April")) %>%
+  mutate(month = replace(month, month == "05", "May")) %>%
+  mutate(month = replace(month, month == "06", "June")) %>%
+  mutate(month = replace(month, month == "07", "July")) %>%
+  mutate(month = replace(month, month == "08", "August")) %>%
+  mutate(month = replace(month, month == "09", "September")) %>%
+  mutate(month = replace(month, month == "10", "October")) %>%
+  mutate(month = replace(month, month == "11", "November")) %>%
+  mutate(month = replace(month, month == "12", "December"))
+```
+
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r bar}
+plot_ly(ny_noaa, x = ~month, y = ~snow, type = "bar") 
+```
+
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r scatter}
+plot_ly(noaa_month, x = ~snow, y = ~prcp, color = ~month, type = "scatter", mode = "markers") 
+```
+
+
+-----------------------------------------------------------------------
+
+### Chart C
+
+```{r box}
+plot_ly(ny_noaa, x = ~month, y = ~snow, type = "box") 
+```
+
+</code></pre>
+</div>
+<script type="text/javascript">
+$(document).ready(function () {
+  FlexDashboard.init({
+    theme: "cosmo",
+    fillPage: true,
+    orientation: "columns",
+    storyboard: false,
+    defaultFigWidth: 576,
+    defaultFigHeight: 460,
+    defaultFigWidthMobile: 360,
+    defaultFigHeightMobile: 460,
+    resize_reload: true
+  });
+});
+</script>
+
+</body>
+</html>

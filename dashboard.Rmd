@@ -1,19 +1,19 @@
 ---
-title: "Plotly"
+title: "Dashboard"
 output: 
-  html_document:
-    toc: true
-    toc_float: true
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    source: embed
 ---
 
-### Loading packages
-```{r librarys}
+```{r setup, include=FALSE}
+library(flexdashboard)
 library(tidyverse)
 library(plotly)
 library(p8105.datasets)
 ```
 
-### Loading and filtering data
 ```{r data}
 data("ny_noaa")
 ny_noaa = ny_noaa %>%
@@ -39,19 +39,31 @@ noaa_month = ny_noaa %>%
   mutate(month = replace(month, month == "12", "December"))
 ```
 
-### Creating bar chart
-```{r}
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Chart A
+
+```{r bar}
 plot_ly(ny_noaa, x = ~month, y = ~snow, type = "bar") 
 ```
 
-### Creating scatter plot
-```{r}
+Column {data-width=350}
+-----------------------------------------------------------------------
+
+### Chart B
+
+```{r scatter}
 plot_ly(noaa_month, x = ~snow, y = ~prcp, color = ~month, type = "scatter", mode = "markers") 
 ```
 
-### Creating boxplot
-```{r}
+
+-----------------------------------------------------------------------
+
+### Chart C
+
+```{r box}
 plot_ly(ny_noaa, x = ~month, y = ~snow, type = "box") 
 ```
-
 
